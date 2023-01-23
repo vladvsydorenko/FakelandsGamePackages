@@ -1,6 +1,6 @@
 {
-  "name": "xyz.vasd.fakepass",
-  "displayName": "FakePass",
+  "name": "xyz.vasd.fake-pass",
+  "displayName": "Fake Pass",
   "unity": "2021.3",
   "description": "A small package for easy custom pass injection.\r\n\r\nFor now, in HDRP, you should create custom pass volume for each injection point.\r\nIt's not very handfull for multi-pass features.\r\n\r\nWith this package you can simplly mark you methods for pass injection with attribute.",
   "version": "0.0.1",

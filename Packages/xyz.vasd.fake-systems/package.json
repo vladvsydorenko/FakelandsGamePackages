@@ -1,6 +1,6 @@
 {
-  "name": "xyz.vasd.fakesystems",
-  "displayName": "FakeSystems",
+  "name": "xyz.vasd.fake-systems",
+  "displayName": "Fake Systems",
   "unity": "2021.3",
   "description": "Ordered systems on top of MonoBehaviours",
   "version": "0.0.2",

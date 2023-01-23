@@ -231,20 +231,20 @@
       },
       "url": "https://packages.unity.com"
     },
-    "xyz.vasd.fakedata": {
-      "version": "file:fake.data",
+    "xyz.vasd.fake-data": {
+      "version": "file:xyz.vasd.fake-data",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fakepass": {
-      "version": "file:fake.pass",
+    "xyz.vasd.fake-pass": {
+      "version": "file:xyz.vasd.fake-pass",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fakesystems": {
-      "version": "file:fake.systems",
+    "xyz.vasd.fake-systems": {
+      "version": "file:xyz.vasd.fake-systems",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
