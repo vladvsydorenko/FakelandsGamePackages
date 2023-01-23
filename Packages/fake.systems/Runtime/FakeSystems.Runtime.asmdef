@@ -1,0 +1,16 @@
+{
+    "name": "FakeSystems.Runtime",
+    "rootNamespace": "Xyz.Vasd.FakeSystems",
+    "references": [
+        "GUID:5e5f53960725a8847bb625103b20c73c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
