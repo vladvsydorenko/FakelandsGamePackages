@@ -231,6 +231,24 @@
       },
       "url": "https://packages.unity.com"
     },
+    "xyz.vasd.fakedata": {
+      "version": "file:fake.data",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "xyz.vasd.fakepass": {
+      "version": "file:fake.pass",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "xyz.vasd.fakesystems": {
+      "version": "file:fake.systems",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
