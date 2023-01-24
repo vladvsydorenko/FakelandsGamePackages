@@ -1,0 +1,20 @@
+{
+    "name": "FakeCore.Runtime",
+    "rootNamespace": "Xyz.Vasd.FakeCore",
+    "references": [
+        "GUID:5e5f53960725a8847bb625103b20c73c",
+        "GUID:2b62654696142e04b8cbbbb42edfa964",
+        "GUID:62ab0a82e3efb314e878151c8224c111",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:457756d89b35d2941b3e7b37b4ece6f1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

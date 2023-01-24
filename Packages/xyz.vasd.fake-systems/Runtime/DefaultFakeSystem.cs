@@ -6,7 +6,7 @@ namespace Xyz.Vasd.FakeSystems
     public class DefaultFakeSystem : MonoBehaviour, IFakeSystem
     {
         public FakeSystemManager Manager { get; private set; }
-        public FakeDataBase DataBase { get; private set; }
+        public FakeDatabase DataBase { get; private set; }
 
         public virtual bool IsSystemActive()
         {

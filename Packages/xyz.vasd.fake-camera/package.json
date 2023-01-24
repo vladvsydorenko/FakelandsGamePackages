@@ -1,0 +1,8 @@
+{
+  "name": "xyz.vasd.fake-camera",
+  "displayName": "Fake Camera",
+  "unity": "2021.3",
+  "description": "Camera features for Fakelands Game",
+  "version": "0.0.1",
+  "hideInEditor": false
+}

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c71c3d3c7e80e7c498b99820a559f33b
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _DisplacementTex: {fileID: 2800000, guid: 73cccf0d0f8fc6449977d719ed8266a8, type: 3}
+  - _FaceTex: {instanceID: 0}
+  - _OutlineTex: {instanceID: 0}
+  - _BumpMap: {instanceID: 0}
+  - _Cube: {instanceID: 0}
+  - _MainTex: {instanceID: 0}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,7 +5,7 @@ namespace Xyz.Vasd.FakeSystems
 {
     public class FakeSystemManager : MonoBehaviour
     {
-        public FakeDataBase DataBase { get; protected set; }
+        public FakeDatabase DataBase { get; protected set; }
         public FakeSystemGroup[] SystemGroups { get; protected set; }
 
         private void OnEnable()

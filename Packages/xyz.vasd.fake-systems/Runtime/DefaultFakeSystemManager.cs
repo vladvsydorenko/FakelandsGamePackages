@@ -6,7 +6,7 @@ namespace Xyz.Vasd.FakeSystems
     [AddComponentMenu("FakeSystems/" + nameof(DefaultFakeSystemManager))]
     public class DefaultFakeSystemManager : FakeSystemManager
     {
-        public FakeDataBase InitialDataBase;
+        public FakeDatabase InitialDataBase;
         public FakeSystemGroup[] InitialGroups;
 
         private void Awake()

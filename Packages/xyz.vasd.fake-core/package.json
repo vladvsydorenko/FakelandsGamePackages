@@ -1,0 +1,8 @@
+{
+  "name": "xyz.vasd.fake-core",
+  "displayName": "Fake Core",
+  "unity": "2021.3",
+  "description": "Core features for Fakelands Game",
+  "version": "0.0.1",
+  "hideInEditor": false
+}

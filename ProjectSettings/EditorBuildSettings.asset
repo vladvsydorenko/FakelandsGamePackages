@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/OutdoorsScene.unity
-    guid: 8124e5870f4fd4c779e7a5f994e84ad1
+    path: Assets/Fake Core/Game Layout/GameLayoutScene.unity
+    guid: 99bdcd7038141994f9c7cca48f8a657e
   m_configObjects: {}
