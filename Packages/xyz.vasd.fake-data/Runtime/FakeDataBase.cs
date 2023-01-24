@@ -23,6 +23,17 @@ namespace Xyz.Vasd.FakeData
             return singleton;
         }
 
+        public void AddSingleton(Type type, object value)
+        {
+            _singletons.Add(type, value);
+        }
+
+
+        public bool ContainsSingleton<T>()
+        {
+            var type = typeof(T);
+            return _singletons.ContainsKey(type);
+        }
 
         public List<T> GetList<T>()
         {

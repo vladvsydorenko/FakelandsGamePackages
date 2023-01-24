@@ -11,6 +11,10 @@ namespace Xyz.Vasd.FakeData
     [AddComponentMenu("FakeData/" + nameof(FakeDataInjector))]
     public class FakeDataInjector : MonoBehaviour
     {
+        [Header("Settings")]
+        public bool Singleton;
+
+        [Header("Refs")]
         public FakeDatabase Database;
 
         private void Awake()
@@ -25,8 +29,14 @@ namespace Xyz.Vasd.FakeData
             var datas = GetComponents<IFakeData>();
             foreach (var data in datas)
             {
-                Debug.Log($"add to list {data.GetType()}");
-                Database.AddToList(data.GetType(), data);
+                if (Singleton)
+                {
+                    Database.AddSingleton(data.GetType(), data);
+                }
+                else
+                {
+                    Database.AddToList(data.GetType(), data);
+                }
             }
         }
 
