@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fake Core/Preloader/PreloaderScene.unity
     guid: 5fbef7bd3c2b06e46859e00c0cb539c6
   m_configObjects:

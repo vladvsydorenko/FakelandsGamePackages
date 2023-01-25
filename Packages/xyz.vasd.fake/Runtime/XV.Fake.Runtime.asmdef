@@ -1,0 +1,14 @@
+{
+    "name": "XV.Fake.Runtime",
+    "rootNamespace": "Xyz.Vasd.Fake",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
