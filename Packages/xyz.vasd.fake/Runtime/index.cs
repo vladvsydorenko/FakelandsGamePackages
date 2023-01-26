@@ -2,285 +2,264 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Xyz.Vasd.Fake
 {
-    public class index {}
+    public struct Entry
+    {
+        public readonly int Id;
+
+        internal int Page;
+        internal int Index;
+
+        internal Entry(int id, int page = -1, int index = -1)
+        {
+            Id = id;
+            Page = page;
+            Index = index;
+        }
+
+        internal void Set(int page, int index)
+        {
+            Page = page;
+            Index = index;
+        }
+        internal Entry Reset()
+        {
+            return new Entry(Id, -1, -1);
+        }
+    }
 
     public class Page
     {
-        #region Properties
+        public int Id { get; private set; }
         public int Count { get; private set; }
         public int Capacity { get; private set; }
-        public List<int> Ids { get; private set; }
-        #endregion
+        public List<Entry> Entries;
 
-        #region State
-        private Type[] _types;
-        private IList[] _layers;
-        private Dictionary<Type, IList> _layersMap;
-        #endregion
-
-        public Page(Type[] types, int capacity = 0)
+        public Page(int id)
         {
+            Id = id;
             Count = 0;
-            Ids = new List<int>(capacity);
-
-            Capacity = capacity;
-
-            _types = types.Distinct().ToArray();
-            _layersMap = new Dictionary<Type, IList>();
-            _layers = _types
-                .Select(type =>
-                {
-                    Type listType = typeof(List<>).MakeGenericType(type);
-                    var list = Activator.CreateInstance(listType, capacity) as IList;
- 
-                    _layersMap.Add(type, list);
-
-                    return list;
-                })
-                .ToArray();
+            Capacity = 0;
+            Entries = new List<Entry>(Capacity);
         }
 
-        #region Creation
-        // Allocate space in layers and return created item's index
-        public int Create()
+        internal Entry Create(Entry entry)
         {
-            var index = Count;
+            entry.Page = Id;
+            entry.Index = Count;
 
-            if (index >= Capacity)
+            if (Count >= Capacity)
             {
-                foreach (var layer in _layers)
-                {
-                    layer.Add(null);
-                }
+                Entries.Add(entry);
                 Capacity++;
+            }
+            else
+            {
+                Entries[entry.Index] = entry;
             }
 
             Count++;
-            return index;
+
+            return entry;
         }
 
-        public void Set(Type type, int index, object value)
+        internal Entry Remove(Entry target)
         {
-            var layer = _layersMap[type];
-            layer[index] = value;
-        }
+            var lastIndex = Entries.Count - 1;
+            var targetIndex = target.Index;
 
-        public object Get(Type type, int index)
-        {
-            var layer = _layersMap[type];
-            return layer[index];
-        }
+            var last = Entries[lastIndex];
+            last.Index = target.Index;
+            Entries[targetIndex] = last;
 
-        // returns id of swapped element
-        public int Remove(int index)
-        {
-            var lastIndex = Count;
-            MoveItem(lastIndex, index);
+            Entries[lastIndex] = target.Reset();
 
             Count--;
 
-            return index;
-        }
-
-        private void MoveItem(int from, int to)
-        {
-            foreach (var layer in _layers)
-            {
-                layer[to] = layer[from];
-                layer[from] = null;
-            }
-        }
-        #endregion
-
-        #region Compares
-        public bool Contains(IEnumerable<Type> types)
-        {
-            return types
-                .Distinct()
-                .All(t => _types.Contains(t));
-        }
-
-        public bool ContainsAny(IEnumerable<Type> types)
-        {
-            return types
-                .Distinct()
-                .Any(t => _types.Contains(t));
-        }
-
-        public bool ContainsOnly(IEnumerable<Type> types)
-        {
-            var uniqueTypes = types.Distinct();
-            if (uniqueTypes.Count() != types.Count()) return false;
-
-            return uniqueTypes.All(t => _types.Contains(t));
-        }
-        #endregion
-    }
-
-    public class Group
-    {
-        public List<Page> Pages { get; private set; }
-        public Type[] Includes { get; private set; }
-        public Type[] Excludes { get; private set; }
-
-        public Group(Type[] inlcudes, Type[] excludes, int capacity = 0)
-        {
-            Includes = inlcudes.Distinct().ToArray();
-            Excludes = excludes.Distinct().ToArray();
-            Pages = new List<Page>(capacity);
-        }
-
-        public void Add(Page page)
-        {
-            Pages.Add(page);
-        }
-
-        public bool IsEqual(Group group)
-        {
-            return IsEqual(group.Includes, group.Excludes);
-        }
-
-        public bool IsEqual(Type[] includes, Type[] excludes)
-        {
-            if (Includes.Length != includes.Length || 
-                Excludes.Length != excludes.Length) return false;
-
-            var includesMatches = Includes
-                .All(t => includes.Contains(t));
-
-            if (!includesMatches) return false;
-
-            var excludeMatches = Excludes
-                .All(t => excludes.Contains(t));
-
-            return excludeMatches;
-        }
-    
-        public bool Matches(Page page)
-        {
-            Debug.Log($"page.Contains(Includes): {page.Contains(Includes)}");
-            Debug.Log($"!page.Contains(Excludes): {!page.ContainsAny(Excludes)}");
-            return page.Contains(Includes) && !page.ContainsAny(Excludes);
+            return last;
         }
     }
 
     public class Database
     {
-        private struct ItemLink
-        {
-            public int Id;
-            public int Page;
-            public int Index;
-        }
-
-        #region State
-        private List<Page> _pages;
-        private List<ItemLink> _links;
-        private List<Group> _groups;
-        #endregion
+        internal List<Page> Pages;
+        internal List<Entry> Entries;
 
         public Database()
         {
-            _pages = new List<Page>();
-            _links = new List<ItemLink>();
-            _groups = new List<Group>();
+            Pages = new List<Page>();
+            Entries = new List<Entry>();
         }
 
-        #region Items
-        public int CreateItem(params object[] values)
+        public void Remove(Entry entry)
         {
-            var id = -1;
+            var page = Pages[entry.Page];
+            var swapped = page.Remove(entry);
 
-            var page = CreatePage(values.Select(v => v.GetType()));
-            id = page.Create();
+            Entries[swapped.Id] = swapped;
+            Entries[entry.Id] = entry.Reset();
+        }
+    }
+}
 
-            return id;
+namespace Xyz.Vasd.Fake.rNd2
+{
+    public static class TypeTools
+    {
+        public static object CreateGeneric(Type baseType, Type valueType, params object[] args)
+        {
+            Type type = baseType.MakeGenericType(valueType);
+
+            return Activator.CreateInstance(type, args);
+        }
+    }
+
+    public class Entry
+    {
+        public readonly int Id;
+
+        #region Internal
+        internal DataPage Page;
+        internal int Index;
+
+        internal Entry(int id, DataPage page = null, int index = -1)
+        {
+            Id = id;
+            Page = page;
+            Index = index;
         }
 
-        public void Set(Type type, int id, object value)
+        internal void Set(DataPage page, int index)
         {
-            var link = _links[id];
-            var page = _pages[link.Id];
+            Page = page;
+            Index = index;
+        }
+        #endregion
+    }
 
-            page.Set(type, link.Index, value);
+    public class DataPage
+    {
+        public readonly int Id;
+        public readonly Type[] Types;
+
+        public int Count { get; private set; }
+        public int Capacity { get; private set; }
+        public List<Entry> Entries { get; private set; }
+
+        #region Internal
+        internal IList[] Layers;
+        internal Dictionary<Type, IList> LayersMap;
+
+        internal DataPage(int id, Type[] types, int capacity = 0)
+        {
+            Id = id;
+            Types = types.Distinct().ToArray();
+            Entries = new List<Entry>(capacity);
+            LayersMap = new Dictionary<Type, IList>(Types.Length);
+
+            Layers = Types
+                .Select(type =>
+                {
+                    var list = (IList)TypeTools.CreateGeneric(typeof(List<>), type, capacity);
+
+                    LayersMap[type] = list;
+
+                    return list;
+                })
+                .ToArray();
+
+            Count = 0;
+            Capacity = capacity;
         }
 
-        public object Get(Type type, int id)
+        internal void Create(Entry entry)
         {
-            var link = _links[id];
-            var page = _pages[link.Id];
+            var index = Count;
 
-            return page.Get(type, link.Index);
+            if (index >= Capacity) Grow(4);
+
+            entry.Set(this, index);
+            Entries[index] = entry;
+
+            Count++;
+        }
+        internal void Remove(Entry entry)
+        {
+            Move(Count - 1, entry.Index);
+            Count--;
+        }
+        internal void Move(Entry entry, Entry targetEntry, DataPage target)
+        {
+            for (int i = 0; i < Layers.Length; i++)
+            {
+                var type = Types[i];
+
+                if (target.Has(type))
+                {
+                    var layer = Layers[i];
+                    target.Set(type, targetEntry, layer[entry.Index]);
+                }
+            }
+        }
+        internal void Set(Type type, Entry entry, object value)
+        {
+
         }
 
-        public void Remove(int id)
+        internal bool Has(Type type)
         {
-            var link = _links[id];
-            var page = _pages[link.Page];
-
-            page.Remove(link.Index);
-            // now link.Index contains swapped element after remove, so move links
-            MoveLink(id, page.Ids[link.Index]);
-
-            _links[id] = link;
+            return LayersMap.ContainsKey(type);
         }
-
-        private void MoveLink(int from, int to)
+        internal bool IsEqual(Type[] types)
         {
-            var toLink = _links[to];
-            var fromLink = _links[from];
+            var comparingTypes = types.Distinct().ToArray();
 
-            toLink.Page = fromLink.Page;
-            toLink.Index = fromLink.Index;
+            if (Types.Length != comparingTypes.Length) return false;
 
-            fromLink.Page = -1;
-            fromLink.Index = -1;
+            return comparingTypes.All(type => Types.Contains(type));
+        }
+        internal bool Contains(Type[] types)
+        {
+            var comparingTypes = types.Distinct().ToArray();
+
+            if (Types.Length < comparingTypes.Length) return false;
+
+            return comparingTypes.All(type => Types.Contains(type));
         }
         #endregion
 
-        #region Pages
-        private Page CreatePage(IEnumerable<Type> types)
+        #region Private
+        private void Grow(int count)
         {
-            var page = _pages.Find(p => p.ContainsOnly(types));
-
-            if (page == null)
+            foreach (var layer in Layers)
             {
-                page = new Page(types.ToArray());
-                _pages.Add(page);
-
-                _groups.ForEach(g =>
+                for (int i = 0; i < count; i++)
                 {
-                    if (g.Matches(page)) g.Add(page);
-                });
+                    layer.Add(null);
+                }
             }
 
-            return page;
-        }
-        #endregion
-
-        #region Groups
-        public Group CreateGroup(params Type[] includes)
-        {
-            return CreateGroup(includes, new Type[0]);
-        }
-        public Group CreateGroup(Type[] includes, Type[] excludes)
-        {
-            var group = _groups.Find(g => g.IsEqual(includes, excludes));
-            if (group == null)
+            for (int i = 0; i < count; i++)
             {
-                group = new Group(includes, excludes);
-                _pages.ForEach(p =>
-                {
-                    if (group.Matches(p)) group.Add(p);
-                });
+                Entries.Add(null);
             }
 
+            Capacity += count;
+        }
 
-            return group;
+        private void Move(int from, int to)
+        {
+            foreach (var layer in Layers)
+            {
+                layer[to] = layer[from];
+                layer[from] = null;
+            }
+            
+            Entries[to].Set(null, -1);
+            Entries[to] = Entries[from];
+            Entries[from] = null;
         }
         #endregion
     }

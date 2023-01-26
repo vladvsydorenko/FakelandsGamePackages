@@ -1,20 +1,53 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Xyz.Vasd.Fake
 {
     public class DatabaseTester : MonoBehaviour
     {
-        [ContextMenu(nameof(Test) + "()")]
-        public void Test()
+        [ContextMenu(nameof(TestDataPage1) + "()")]
+        public void TestDataPage1()
         {
-            var db = new Database();
-            db.CreateItem(transform);
-            var group = db.CreateGroup(typeof(Transform));
+            Debug.Log("---- TEST ----");
 
-            var tra = group.Pages[0].Get(typeof(Transform), 0) as Transform;
+            var page = new Page(0);
 
-            Debug.Log($"count: {group.Pages.Count}");
-            Debug.Log($"Item: {tra.position}");
+            var entry = new Entry(0);
+
+            Debug.Log(entry.Id);
+            Debug.Log(entry.Page);
+            Debug.Log(entry.Index);
+
+            entry = page.Create(entry);
+
+            Debug.Log("After create:");
+
+            Debug.Log(entry.Id);
+            Debug.Log(entry.Page);
+            Debug.Log(entry.Index);
+
+            var entry2 = new Entry(1);
+            entry2 = page.Create(entry2);
+
+            var moved = page.Remove(entry);
+
+            Debug.Log("After remove:");
+
+            Debug.Log(moved.Id);
+            Debug.Log(moved.Page);
+            Debug.Log(moved.Index);
+
+
+            Debug.Log("After remove, last element:");
+            moved = page.Entries[1];
+            Debug.Log(page.Count);
+            Debug.Log(moved.Id);
+            Debug.Log(moved.Page);
+            Debug.Log(moved.Index);
+
+            Debug.Log("---- TEST END ----");
         }
     }
 }
