@@ -32,31 +32,17 @@ namespace Xyz.Vasd.Fake
             var test2 = (Test)database.GetData(typeof(Test), entry2);
             Debug.Log(test == null);
             Debug.Log(test2.Id);
+
+
+            Debug.Log("---------------------------------");
+
+            database.SetData(transform.GetType(), entry2, transform);
+            var tes = (Test)database.GetData(typeof(Test), entry2);
+            var tr = (Transform)database.GetData(typeof(Transform), entry2);
+            Debug.Log(tr != null);
+            Debug.Log(tr.position);
+            Debug.Log(tes.Id);
             
-            //var page = new Page(0, new Type[] { typeof(Transform) });
-            //var entry = new Entry(0);
-
-            //entry = page.Add(entry);
-            //page.SetData(typeof(Transform), entry, transform);
-            //var tr = (Transform)page.GetData(typeof(Transform), entry);
-
-            //Debug.Log(tr.position);
-
-            //var entry2 = new Entry(1);
-            //entry2 = page.Add(entry2);
-            //page.SetData(typeof(Transform), entry2, transform.parent);
-            //var tr2 = (Transform)page.GetData(typeof(Transform), entry2);
-
-            //Debug.Log(tr2.position);
-
-            //var moved = page.Remove(entry2);
-            //Debug.Log(moved.Id);
-            //Debug.Log(moved.Index);
-            //Debug.Log(page.Count);
-
-            //var tr3 = (Transform)page.GetData(typeof(Transform), moved);
-            //Debug.Log(tr3.position);
-
             Debug.Log("---- TEST END ----");
         }
     }

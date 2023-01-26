@@ -108,6 +108,23 @@ namespace Xyz.Vasd.Fake
             return lastEntry;
         }
 
+        internal void Copy(Entry entry, Entry target, Page page)
+        {
+            foreach (var layer in Layers)
+            {
+                var value = layer[entry.Index];
+                var type = value.GetType();
+
+                layer[entry.Index] = null;
+                page.SetData(type, target, value);
+            }
+        }
+
+        internal bool HasData(Type type)
+        {
+            return LayersMap.ContainsKey(type);
+        }
+
         internal object GetData(Type type, Entry entry)
         {
             var list = LayersMap[type];
@@ -229,7 +246,26 @@ namespace Xyz.Vasd.Fake
             if (!entry.Exists()) return;
 
             var page = Pages[entry.Page];
-            page.SetData(type, entry, value);
+            var targetPage = page;
+
+            Entry targetEntry = entry;
+
+            if (!page.HasData(type))
+            {
+                var types = page.Types
+                    .Concat(new Type[] { type })
+                    .ToArray();
+
+                targetPage = FindOrCreatePage(types);
+                targetEntry = targetPage.Add(entry);
+
+                page.Copy(entry, targetEntry, targetPage);
+                var moved = page.Remove(entry);
+                Entries[moved.Id] = moved;
+            }
+
+            Entries[targetEntry.Id] = targetEntry;
+            targetPage.SetData(type, targetEntry, value);
         }
 
         internal Page FindPage(Type[] types)
@@ -248,6 +284,24 @@ namespace Xyz.Vasd.Fake
             Pages.Add(page);
 
             return page;
+        }
+
+        private Entry GetFreeEntry()
+        {
+            Entry entry;
+            if (RemovedEntries.Count > 0)
+            {
+                var last = RemovedEntries.Count - 1;
+                entry = Entries[RemovedEntries[last]];
+                RemovedEntries.RemoveAt(last);
+            }
+            else
+            {
+                entry = new Entry(Entries.Count);
+                Entries.Add(entry);
+            }
+
+            return entry;
         }
     }
 }
