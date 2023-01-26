@@ -12,40 +12,29 @@ namespace Xyz.Vasd.Fake
         {
             Debug.Log("---- TEST ----");
 
-            var page = new Page(0);
-
+            var page = new Page(0, new Type[] { typeof(Transform) });
             var entry = new Entry(0);
 
-            Debug.Log(entry.Id);
-            Debug.Log(entry.Page);
-            Debug.Log(entry.Index);
+            entry = page.Add(entry);
+            page.SetData(typeof(Transform), entry, transform);
+            var tr = (Transform)page.GetData(typeof(Transform), entry);
 
-            entry = page.Create(entry);
-
-            Debug.Log("After create:");
-
-            Debug.Log(entry.Id);
-            Debug.Log(entry.Page);
-            Debug.Log(entry.Index);
+            Debug.Log(tr.position);
 
             var entry2 = new Entry(1);
-            entry2 = page.Create(entry2);
+            entry2 = page.Add(entry2);
+            page.SetData(typeof(Transform), entry2, transform.parent);
+            var tr2 = (Transform)page.GetData(typeof(Transform), entry2);
 
-            var moved = page.Remove(entry);
+            Debug.Log(tr2.position);
 
-            Debug.Log("After remove:");
-
+            var moved = page.Remove(entry2);
             Debug.Log(moved.Id);
-            Debug.Log(moved.Page);
             Debug.Log(moved.Index);
-
-
-            Debug.Log("After remove, last element:");
-            moved = page.Entries[1];
             Debug.Log(page.Count);
-            Debug.Log(moved.Id);
-            Debug.Log(moved.Page);
-            Debug.Log(moved.Index);
+
+            var tr3 = (Transform)page.GetData(typeof(Transform), moved);
+            Debug.Log(tr3.position);
 
             Debug.Log("---- TEST END ----");
         }
