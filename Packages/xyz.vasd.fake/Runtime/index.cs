@@ -19,6 +19,16 @@ namespace Xyz.Vasd.Fake
             Index = index;
         }
 
+        internal Entry Reset()
+        {
+            return new Entry(Id, -1, -1);
+        }
+
+        internal bool Exists()
+        {
+            return Id >= 0 && Page >= 0 && Index >= 0;
+        }
+
         internal static readonly Entry Null = new(-1, -1, -1);
     }
 
@@ -88,6 +98,11 @@ namespace Xyz.Vasd.Fake
             Entries[index] = lastEntry;
             Entries[lastIndex] = Entry.Null;
 
+            foreach (var layer in Layers)
+            {
+                layer[lastIndex] = null;
+            }
+
             Count--;
 
             return lastEntry;
@@ -103,6 +118,12 @@ namespace Xyz.Vasd.Fake
         {
             var list = LayersMap[type];
             list[entry.Index] = value;
+        }
+
+        internal bool IsEqual(Type[] types)
+        {
+            if (types.Length != Types.Length) return false;
+            return types.All(t => Types.Contains(t));
         }
 
         private void Grow(int size)
@@ -124,5 +145,109 @@ namespace Xyz.Vasd.Fake
         }
     }
 
+    public class Database
+    {
+        internal List<Page> Pages;
+        internal List<Entry> Entries;
+        internal List<int> RemovedEntries;
 
+        public Database()
+        {
+            Pages = new List<Page>();
+            Entries = new List<Entry>();
+            RemovedEntries = new List<int>();
+        }
+
+        public Entry CreateEntry(params object[] values)
+        {
+            var types = values
+                .Select(x => x.GetType())
+                .Distinct()
+                .ToArray();
+
+            var page = FindOrCreatePage(types);
+
+            Entry entry;
+            if (RemovedEntries.Count > 0)
+            {
+                var last = RemovedEntries.Count - 1;
+                entry = Entries[RemovedEntries[last]];
+                RemovedEntries.RemoveAt(last);
+            }
+            else
+            {
+                entry = new Entry(Entries.Count);
+                Entries.Add(entry);
+            }
+
+            entry = page.Add(entry);
+            Entries[entry.Index] = entry;
+
+            foreach (var value in values)
+            {
+                page.SetData(value.GetType(), entry, value);
+            }
+
+            return entry;
+        }
+
+        public void RemoveEntry(Entry entry)
+        {
+            // refresh entry
+            entry = Entries[entry.Id];
+
+            var page = Pages[entry.Page];
+            var moved = page.Remove(entry);
+
+            Entries[moved.Id] = moved;
+            Entries[entry.Id] = entry.Reset();
+
+            RemovedEntries.Add(entry.Id);
+        }
+
+        public bool Exists(Entry entry)
+        {
+            entry = Entries[entry.Id];
+            return entry.Exists();
+        }
+
+        public object GetData(Type type, Entry entry)
+        {
+            // refresh entry as page and index could be changed
+            entry = Entries[entry.Id];
+
+            if (!entry.Exists()) return null;
+
+            var page = Pages[entry.Page];
+            return page.GetData(type, entry);
+        }
+
+        public void SetData(Type type, Entry entry, object value)
+        {
+            entry = Entries[entry.Id];
+
+            if (!entry.Exists()) return;
+
+            var page = Pages[entry.Page];
+            page.SetData(type, entry, value);
+        }
+
+        internal Page FindPage(Type[] types)
+        {
+            return Pages.Find(page => page.IsEqual(types));
+        }
+
+        internal Page FindOrCreatePage(Type[] types)
+        {
+            var page = FindPage(types);
+            if (page != null) return page;
+
+            var id = Pages.Count;
+            page = new Page(id, types);
+
+            Pages.Add(page);
+
+            return page;
+        }
+    }
 }
