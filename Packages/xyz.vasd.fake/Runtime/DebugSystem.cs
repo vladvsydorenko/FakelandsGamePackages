@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using Xyz.Vasd.Fake.Database;
 using Xyz.Vasd.Fake.Systems;
 
 namespace Xyz.Vasd.Fake
 {
-    public class DebugSystem : SystemBehaviour<FakeContext>
+    public class DebugSystem : SystemBehaviour<DefaultContext>
     {
         public class TestClass1
         {
@@ -57,7 +56,7 @@ namespace Xyz.Vasd.Fake
             var entry2 = Context.DB.CreateEntry(new TestClass2(0));
             var entry3 = Context.DB.CreateEntry(new TestClass1(1), new TestClass2(1));
 
-            
+
 
             Debug.Log($"START: {Id}");
         }
@@ -77,5 +76,4 @@ namespace Xyz.Vasd.Fake
             Debug.Log($"STOP: {Id}");
         }
     }
-
 }

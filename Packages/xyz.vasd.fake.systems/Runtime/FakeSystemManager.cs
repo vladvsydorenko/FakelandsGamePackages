@@ -42,7 +42,13 @@ namespace Xyz.Vasd.Fake.Systems
             StopSystems.Clear();
             foreach (var system in Systems)
             {
-                StopSystems.Add(system);
+                try
+                {
+                    StopSystems.Add(system);
+                }
+                catch (System.Exception)
+                {
+                }
             }
 
             StartSystems.Clear();
@@ -61,9 +67,16 @@ namespace Xyz.Vasd.Fake.Systems
         {
             foreach (var system in StartSystems)
             {
-                system.OnSystemAwake();
-                system.OnSystemStart();
-                UpdateSystems.Add(system);
+                try
+                {
+                    system.OnSystemAwake();
+                    system.OnSystemStart();
+                    UpdateSystems.Add(system);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
 
             StartSystems.Clear();
@@ -73,7 +86,14 @@ namespace Xyz.Vasd.Fake.Systems
         {
             foreach (var system in UpdateSystems)
             {
-                if (system.IsSystemEnabled) system.OnSystemUpdate();
+                try
+                {
+                    if (system.IsSystemEnabled) system.OnSystemUpdate();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
         }
 
@@ -81,7 +101,14 @@ namespace Xyz.Vasd.Fake.Systems
         {
             foreach (var system in UpdateSystems)
             {
-                if (system.IsSystemEnabled) system.OnSystemFixedUpdate();
+                try
+                {
+                    if (system.IsSystemEnabled) system.OnSystemFixedUpdate();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
         }
 
@@ -89,7 +116,14 @@ namespace Xyz.Vasd.Fake.Systems
         {
             foreach (var system in StopSystems)
             {
-                system.OnSystemStop();
+                try
+                {
+                    system.OnSystemStop();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
+                }
             }
 
             StopSystems.Clear();

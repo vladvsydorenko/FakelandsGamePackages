@@ -4,20 +4,61 @@ using System.Linq;
 
 namespace Xyz.Vasd.Fake.Database
 {
-    public abstract class FakeDatabaseBase
+    #region Singletons
+    public partial class FakeDatabase
     {
-        internal List<FakePage> Pages;
-        internal List<FakeGroup> Groups;
-        internal List<Entry> Entries;
-        internal List<Entry> RemovedEntries;
+        internal Dictionary<Type, object> Singletons = new();
 
-        public FakeDatabaseBase()
+        public bool ContainsSingleton<T>()
         {
-            Pages = new List<FakePage>();
-            Groups = new List<FakeGroup>();
-            Entries = new List<Entry>();
-            RemovedEntries = new List<Entry>();
+            return ContainsSingleton(typeof(T));
         }
+        public bool ContainsSingleton(Type type)
+        {
+            return Singletons.ContainsKey(type);
+        }
+
+        public T GetSingleton<T>(T fallback = default)
+        {
+            return (T)GetSingleton(typeof(T), fallback);
+        }
+        public object GetSingleton(Type type, object fallback = null)
+        {
+            if (!Singletons.ContainsKey(type))
+            {
+                if (fallback == null) return null;
+                Singletons[type] = fallback;
+            };
+            return Singletons[type];
+        }
+
+        public void SetSingleton<T>(T value)
+        {
+            SetSingleton(typeof(T), value);
+        }
+        public void SetSingleton(Type type, object value)
+        {
+            Singletons[type] = value;
+        }
+
+        public void RemoveSingleton<T>()
+        {
+            RemoveSingleton(typeof(T));
+        }
+        public void RemoveSingleton(Type type)
+        {
+            Singletons.Remove(type);
+        }
+    }
+    #endregion
+
+    #region Pages
+    public partial class FakeDatabase
+    {
+        internal List<FakePage> Pages = new();
+        internal List<FakeGroup> Groups = new();
+        internal List<Entry> Entries = new();
+        internal List<Entry> RemovedEntries = new();
 
         internal Entry GetEntry(Entry entry)
         {
@@ -116,8 +157,10 @@ namespace Xyz.Vasd.Fake.Database
             return Groups.Find(group => group.IsEqual(includes, excludes));
         }
     }
+    #endregion
 
-    public class FakeDatabase : FakeDatabaseBase
+    #region Data
+    public partial class FakeDatabase
     {
         public Entry CreateEntry(params object[] values)
         {
@@ -226,4 +269,5 @@ namespace Xyz.Vasd.Fake.Database
             return targetPage;
         }
     }
+    #endregion
 }

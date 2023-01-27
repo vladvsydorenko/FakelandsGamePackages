@@ -33,8 +33,11 @@ namespace Xyz.Vasd.Fake.Systems
     {
         protected T Context;
 
+        public override bool IsSystemEnabled => base.IsSystemEnabled && Context != null;
+
         public override void OnSystemAwake()
         {
+            Debug.Log("awake?");
             Context = GetComponentInParent<T>();
         }
     }
