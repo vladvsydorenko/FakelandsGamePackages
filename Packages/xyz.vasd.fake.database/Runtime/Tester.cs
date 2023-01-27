@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Database
 {
     public class Tester : MonoBehaviour
     {
@@ -14,9 +12,9 @@ namespace Xyz.Vasd.Fake
         public void Test1()
         {
             Debug.Log("---- TEST ----");
-            
-            var db = new Database();
-            
+
+            var db = new FakeDatabase();
+
             var entry1 = db.CreateEntry(new TestClass { Id = 1 });
             var entry2 = db.CreateEntry(new TestClass { Id = 2 });
 
@@ -25,25 +23,35 @@ namespace Xyz.Vasd.Fake
 
             db.RemoveEntry(entry1);
 
-            Debug.Log(((TestClass)db.GetData(typeof(TestClass), entry1)));
+            Debug.Log((TestClass)db.GetData(typeof(TestClass), entry1));
             Debug.Log(((TestClass)db.GetData(typeof(TestClass), entry2)).Id);
 
             db.SetData(typeof(TestClass2), entry2, new TestClass2 { Id2 = 22 });
             db.SetData(typeof(TestClass2), entry2, new TestClass2 { Id2 = 22 });
             Debug.Log(((TestClass2)db.GetData(typeof(TestClass2), entry2)).Id2);
 
-            db.ClearData(typeof(TestClass), entry2);
-            Debug.Log(((TestClass)db.GetData(typeof(TestClass), entry2)) == null);
+            db.RemoveData(typeof(TestClass), entry2);
+            Debug.Log((TestClass)db.GetData(typeof(TestClass), entry2) == null);
 
             Debug.Log("================================================");
             Debug.Log("GROUPS");
             var group = db.CreateGroup(
                 new Type[] { typeof(TestClass), typeof(TestClass2) },
-                new Type[] {  }
+                new Type[] { }
             );
 
             Debug.Log(group.Pages.Count);
             Debug.Log(db.Pages.Count);
+
+            Debug.Log("---- TEST END ----");
+        }
+
+        [ContextMenu(nameof(Test2) + "()")]
+        public void Test2()
+        {
+            Debug.Log("---- TEST ----");
+
+
 
             Debug.Log("---- TEST END ----");
         }

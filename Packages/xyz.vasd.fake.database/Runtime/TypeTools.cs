@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Database
 {
-    public static class TypeTools
+    internal static class TypeTools
     {
         public static object CreateGeneric(Type baseType, Type valueType, params object[] args)
         {

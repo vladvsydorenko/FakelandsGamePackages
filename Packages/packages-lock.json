@@ -282,6 +282,18 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "xyz.vasd.fake.database": {
+      "version": "file:xyz.vasd.fake.database",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "xyz.vasd.fake.systems": {
+      "version": "file:xyz.vasd.fake.systems",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

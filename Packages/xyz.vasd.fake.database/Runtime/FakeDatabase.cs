@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Database
 {
-    public abstract class DatabaseBase
+    public abstract class FakeDatabaseBase
     {
-        internal List<Page> Pages;
-        internal List<Group> Groups;
+        internal List<FakePage> Pages;
+        internal List<FakeGroup> Groups;
         internal List<Entry> Entries;
         internal List<Entry> RemovedEntries;
 
-        public DatabaseBase()
+        public FakeDatabaseBase()
         {
-            Pages = new List<Page>();
-            Groups = new List<Group>();
+            Pages = new List<FakePage>();
+            Groups = new List<FakeGroup>();
             Entries = new List<Entry>();
             RemovedEntries = new List<Entry>();
         }
@@ -53,9 +53,9 @@ namespace Xyz.Vasd.Fake
             return entry;
         }
 
-        internal Page CreatePage(Type[] types)
+        internal FakePage CreatePage(Type[] types)
         {
-            var page = new Page(Pages.Count, types);
+            var page = new FakePage(Pages.Count, types);
 
             foreach (var group in Groups)
             {
@@ -67,18 +67,18 @@ namespace Xyz.Vasd.Fake
             return page;
         }
 
-        internal Page GetPage(Entry entry)
+        internal FakePage GetPage(Entry entry)
         {
             if (entry.Page < 0 || entry.Page >= Pages.Count) return null;
             return Pages[entry.Page];
         }
-        
-        internal Page FindPage(Type[] types)
+
+        internal FakePage FindPage(Type[] types)
         {
             return Pages.Find(page => page.IsEqual(types));
         }
 
-        internal Page FindOrCreatePage(Type[] types)
+        internal FakePage FindOrCreatePage(Type[] types)
         {
             var page = FindPage(types);
 
@@ -87,7 +87,7 @@ namespace Xyz.Vasd.Fake
             return page;
         }
 
-        internal Page FindOrCreatePage(object[] values)
+        internal FakePage FindOrCreatePage(object[] values)
         {
             var types = values
                 .Select(value => value.GetType())
@@ -96,10 +96,10 @@ namespace Xyz.Vasd.Fake
 
             return FindOrCreatePage(types);
         }
-    
-        internal Group CreateGroup(Type[] includes, Type[] excludes)
+
+        internal FakeGroup CreateGroup(Type[] includes, Type[] excludes)
         {
-            var group = new Group(includes, excludes);
+            var group = new FakeGroup(includes, excludes);
 
             foreach (var page in Pages)
             {
@@ -110,14 +110,14 @@ namespace Xyz.Vasd.Fake
 
             return group;
         }
-        
-        internal Group FindGroup(Type[] includes, Type[] excludes)
+
+        internal FakeGroup FindGroup(Type[] includes, Type[] excludes)
         {
             return Groups.Find(group => group.IsEqual(includes, excludes));
         }
     }
 
-    public class Database : DatabaseBase
+    public class FakeDatabase : FakeDatabaseBase
     {
         public Entry CreateEntry(params object[] values)
         {
@@ -134,6 +134,20 @@ namespace Xyz.Vasd.Fake
             SetEntry(entry);
 
             return entry;
+        }
+
+        public void RemoveEntry(Entry entry)
+        {
+            entry = GetEntry(entry);
+            var page = GetPage(entry);
+
+            var moved = page.Remove(entry);
+            SetEntry(moved);
+
+            entry = entry.Reset();
+            SetEntry(entry);
+
+            RemovedEntries.Add(entry);
         }
 
         public object GetData(Type type, Entry entry)
@@ -164,7 +178,7 @@ namespace Xyz.Vasd.Fake
             page.SetData(type, entry, value);
         }
 
-        public void ClearData(Type type, Entry entry)
+        public void RemoveData(Type type, Entry entry)
         {
             entry = GetEntry(entry);
             var page = GetPage(entry);
@@ -175,21 +189,7 @@ namespace Xyz.Vasd.Fake
             Move(entry, types);
         }
 
-        public void RemoveEntry(Entry entry)
-        {
-            entry = GetEntry(entry);
-            var page = GetPage(entry);
-
-            var moved = page.Remove(entry);
-            SetEntry(moved);
-
-            entry = entry.Reset();
-            SetEntry(entry);
-
-            RemovedEntries.Add(entry);
-        }
-
-        public Group FindOrCreateGroup(Type[] includes, Type[] excludes)
+        public FakeGroup FindOrCreateGroup(Type[] includes, Type[] excludes)
         {
             var group = FindGroup(includes, excludes);
             if (group == null) group = CreateGroup(includes, excludes);
@@ -197,7 +197,7 @@ namespace Xyz.Vasd.Fake
             return group;
         }
 
-        private Page Move(Entry entry, Type[] types)
+        private FakePage Move(Entry entry, Type[] types)
         {
             var page = GetPage(entry);
 

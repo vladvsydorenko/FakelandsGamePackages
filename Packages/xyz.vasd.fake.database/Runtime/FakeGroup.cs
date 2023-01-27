@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Database
 {
-    public class Group
+    public class FakeGroup
     {
         internal Type[] Includes;
         internal Type[] Excludes;
 
-        internal List<Page> Pages;
+        internal List<FakePage> Pages;
 
-        internal Group(Type[] includes, Type[] excludes)
+        internal FakeGroup(Type[] includes, Type[] excludes)
         {
             Includes = includes.Distinct().ToArray();
             Excludes = excludes.Distinct().ToArray();
-            Pages = new List<Page>();
+            Pages = new List<FakePage>();
         }
 
-        internal void Add(Page page)
+        internal void Add(FakePage page)
         {
             Pages.Add(page);
         }
@@ -33,7 +33,7 @@ namespace Xyz.Vasd.Fake
             return true;
         }
 
-        internal bool Matches(Page page)
+        internal bool Matches(FakePage page)
         {
             return page.Contains(Includes) && !page.ContainsAny(Excludes);
         }

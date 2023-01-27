@@ -1,0 +1,14 @@
+{
+    "name": "XV.Fake.Database.Runtime",
+    "rootNamespace": "Xyz.Vasd.Fake.Database",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

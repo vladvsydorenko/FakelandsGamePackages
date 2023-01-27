@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Database
 {
     public struct Entry
     {
+        internal int a;
         internal int Id;
         internal int Page;
         internal int Index;
@@ -24,7 +25,7 @@ namespace Xyz.Vasd.Fake
         internal static readonly Entry Null = new Entry();
     }
 
-    public class PageBase
+    public abstract class FakePageBase
     {
         internal readonly int Id;
 
@@ -38,7 +39,7 @@ namespace Xyz.Vasd.Fake
         internal readonly IList[] Layers;
         internal readonly Dictionary<Type, IList> LayersMap;
 
-        internal PageBase(int id, Type[] types)
+        internal FakePageBase(int id, Type[] types)
         {
             Id = id;
 
@@ -97,9 +98,9 @@ namespace Xyz.Vasd.Fake
         }
     }
 
-    public class Page : PageBase
+    public class FakePage : FakePageBase
     {
-        internal Page(int id, Type[] types) : base(id, types)
+        internal FakePage(int id, Type[] types) : base(id, types)
         {
         }
 
@@ -141,7 +142,7 @@ namespace Xyz.Vasd.Fake
             return lastEntry;
         }
 
-        internal void Copy(Entry entry, Page target, Entry targetEntry)
+        internal void Copy(Entry entry, FakePage target, Entry targetEntry)
         {
             for (int i = 0; i < Layers.Length; i++)
             {
