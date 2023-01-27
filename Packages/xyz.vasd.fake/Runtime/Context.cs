@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Xyz.Vasd.Fake
 {
     // stores data
-    public class FakeContext : MonoBehaviour
+    public class Context : MonoBehaviour
     {
         private Dictionary<Type, object> _values;
 
