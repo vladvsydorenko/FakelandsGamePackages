@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Xyz.Vasd.Fake.Database;
 
 namespace Xyz.Vasd.Fake
 {
     // stores data
-    public class Context : MonoBehaviour
+    [AddComponentMenu("Fake/Fake Context")]
+    public class FakeContext : MonoBehaviour
     {
-        private Dictionary<Type, object> _values;
+        public FakeDatabase DB { get; private set; }
+
+        internal Dictionary<Type, object> Values;
+
+        private void Awake()
+        {
+            DB = new FakeDatabase();
+            Values = new Dictionary<Type, object>();
+        }
 
         public bool Contains<T>()
         {
@@ -15,7 +25,7 @@ namespace Xyz.Vasd.Fake
         }
         public bool Contains(Type type)
         {
-            return _values.ContainsKey(type);
+            return Values.ContainsKey(type);
         }
 
         public T Get<T>()
@@ -24,8 +34,8 @@ namespace Xyz.Vasd.Fake
         }
         public object Get(Type type)
         {
-            if (!_values.ContainsKey(type)) return null;
-            return _values[type];
+            if (!Values.ContainsKey(type)) return null;
+            return Values[type];
         }
 
         public void Set<T>(T value)
@@ -34,7 +44,7 @@ namespace Xyz.Vasd.Fake
         }
         public void Set(Type type, object value)
         {
-            _values[type] = value;
+            Values[type] = value;
         }
 
         public void Remove<T>()
@@ -43,7 +53,7 @@ namespace Xyz.Vasd.Fake
         }
         public void Remove(Type type)
         {
-            _values.Remove(type);
+            Values.Remove(type);
         }
     }
 }

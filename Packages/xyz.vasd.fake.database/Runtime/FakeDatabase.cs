@@ -197,6 +197,19 @@ namespace Xyz.Vasd.Fake.Database
             return group;
         }
 
+        public FakeGroup FindOrCreateGroup(FakeGroupDescriptor descriptor)
+        {
+            var includes = descriptor.Includes.ToArray();
+            var excludes = descriptor.Excludes.ToArray();
+
+            return FindOrCreateGroup(includes, excludes);
+        }
+
+        public FakeGroupDescriptor CreateGroupDescriptor()
+        {
+            return new FakeGroupDescriptor(this);
+        }
+
         private FakePage Move(Entry entry, Type[] types)
         {
             var page = GetPage(entry);
