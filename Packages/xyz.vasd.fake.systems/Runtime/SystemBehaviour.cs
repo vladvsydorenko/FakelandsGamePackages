@@ -7,6 +7,10 @@ namespace Xyz.Vasd.Fake.Systems
     {
         public virtual bool IsSystemEnabled => isActiveAndEnabled;
 
+        public virtual void OnSystemAwake()
+        {
+        }
+
         public virtual void OnSystemStart()
         {
         }
@@ -21,6 +25,17 @@ namespace Xyz.Vasd.Fake.Systems
 
         public virtual void OnSystemStop()
         {
+        }
+    }
+
+    [AddComponentMenu("")]
+    public class SystemBehaviour<T> : SystemBehaviour where T : Component
+    {
+        protected T Context;
+
+        public override void OnSystemAwake()
+        {
+            Context = GetComponentInParent<T>();
         }
     }
 }

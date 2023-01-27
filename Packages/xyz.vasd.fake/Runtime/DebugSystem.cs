@@ -3,7 +3,7 @@ using Xyz.Vasd.Fake.Systems;
 
 namespace Xyz.Vasd.Fake
 {
-    public class DebugSystem : SystemBehaviour
+    public class DebugSystem : SystemBehaviour<Context>
     {
         public int Id;
 

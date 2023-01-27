@@ -61,6 +61,7 @@ namespace Xyz.Vasd.Fake.Systems
         {
             foreach (var system in StartSystems)
             {
+                system.OnSystemAwake();
                 system.OnSystemStart();
                 UpdateSystems.Add(system);
             }
