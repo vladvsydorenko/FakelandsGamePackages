@@ -5,31 +5,11 @@ using System.Linq;
 
 namespace Xyz.Vasd.Fake.Database
 {
-    public struct Entry
-    {
-        internal int a;
-        internal int Id;
-        internal int Page;
-        internal int Index;
-
-        internal Entry Reset()
-        {
-            return new Entry
-            {
-                Id = Id,
-                Page = -1,
-                Index = -1,
-            };
-        }
-
-        internal static readonly Entry Null = new Entry();
-    }
-
-    public abstract class FakePageBase
+    public partial class FakePage
     {
         internal readonly int Id;
 
-        internal int Count;
+        public int Count { get; private set; }
         internal int Capacity;
 
         internal readonly Type[] Types;
@@ -39,7 +19,7 @@ namespace Xyz.Vasd.Fake.Database
         internal readonly IList[] Layers;
         internal readonly Dictionary<Type, IList> LayersMap;
 
-        internal FakePageBase(int id, Type[] types)
+        internal FakePage(int id, Type[] types)
         {
             Id = id;
 
@@ -98,10 +78,22 @@ namespace Xyz.Vasd.Fake.Database
         }
     }
 
-    public class FakePage : FakePageBase
+    public partial class FakePage
     {
-        internal FakePage(int id, Type[] types) : base(id, types)
+        public List<Entry> GetEntries()
         {
+            return Entries;
+        }
+
+        public IList GetDataArray(Type type)
+        {
+            if (!LayersMap.ContainsKey(type)) return new object[0];
+
+            return LayersMap[type];
+        }
+        public IList<T> GetDataArray<T>()
+        {
+            return GetDataArray(typeof(T)) as IList<T>;
         }
 
         internal Entry Add(Entry entry)

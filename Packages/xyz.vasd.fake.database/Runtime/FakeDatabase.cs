@@ -221,6 +221,11 @@ namespace Xyz.Vasd.Fake.Database
             page.SetData(type, entry, value);
         }
 
+        public void SetData<T>(Entry entry, T value)
+        {
+            SetData(typeof(T), entry, value);
+        }
+
         public void RemoveData(Type type, Entry entry)
         {
             entry = GetEntry(entry);

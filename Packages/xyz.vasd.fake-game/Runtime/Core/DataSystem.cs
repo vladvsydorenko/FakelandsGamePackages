@@ -3,7 +3,7 @@ using Xyz.Vasd.Fake.Systems;
 
 namespace Xyz.Vasd.FakeGame.Core
 {
-    public class DataSystem<T> : SystemBehaviour where T : Component, IDataContext
+    public class DataSystem<T> : SystemBehaviour where T : IDataContext
     {
         protected T Context;
 
@@ -13,5 +13,10 @@ namespace Xyz.Vasd.FakeGame.Core
         {
             Context = GetComponentInParent<T>();
         }
+    }
+
+    [AddComponentMenu("")]
+    public class DataSystem : DataSystem<IDataContext>
+    {
     }
 }

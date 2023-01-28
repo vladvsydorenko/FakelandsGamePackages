@@ -9,7 +9,7 @@ namespace Xyz.Vasd.Fake.Database
         internal Type[] Includes;
         internal Type[] Excludes;
 
-        internal List<FakePage> Pages;
+        public List<FakePage> Pages { get; private set; }
 
         internal FakeGroup(Type[] includes, Type[] excludes)
         {

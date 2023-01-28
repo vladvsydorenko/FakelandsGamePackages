@@ -3,7 +3,7 @@
 namespace Xyz.Vasd.Fake.Systems
 {
 
-    [AddComponentMenu("Fake/Systems/FakeSystem Host")]
+    [AddComponentMenu("Fake/Systems/System Host")]
     public class FakeSystemHost : MonoBehaviour
     {
         private FakeSystemLoop Manager;

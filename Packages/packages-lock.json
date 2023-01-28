@@ -276,12 +276,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "xyz.vasd.fake": {
-      "version": "file:xyz.vasd.fake",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "xyz.vasd.fake-game": {
       "version": "file:xyz.vasd.fake-game",
       "depth": 0,

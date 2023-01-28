@@ -8,6 +8,7 @@ namespace Xyz.Vasd.FakeGame.Core
         FakeDatabase DB { get; }
     }
 
+    [AddComponentMenu("Fake Game/Data Context")]
     public class DataContext : MonoBehaviour, IDataContext
     {
         public FakeDatabase DB => _db;
