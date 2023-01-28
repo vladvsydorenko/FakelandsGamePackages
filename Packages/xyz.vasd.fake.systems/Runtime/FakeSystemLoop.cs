@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Systems
 {
-    public class FakeSystemManager
+    public class FakeSystemLoop
     {
         internal List<IFakeSystem> Systems;
 
@@ -11,7 +11,7 @@ namespace Xyz.Vasd.Fake.Systems
         internal List<IFakeSystem> UpdateSystems;
         internal List<IFakeSystem> StopSystems;
 
-        internal FakeSystemManager()
+        internal FakeSystemLoop()
         {
             Systems = new List<IFakeSystem>();
             StartSystems = new List<IFakeSystem>();

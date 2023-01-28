@@ -1,6 +1,6 @@
 {
-    "name": "XV.Fake.Context.Runtime",
-    "rootNamespace": "Xyz.Vasd.Fake.Context",
+    "name": "XV.Fake.Database",
+    "rootNamespace": "Xyz.Vasd.Fake.Database",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

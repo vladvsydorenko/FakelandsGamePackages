@@ -3,14 +3,14 @@
 namespace Xyz.Vasd.Fake.Systems
 {
 
-    [AddComponentMenu("Fake/Systems/SystemBehaviour Host")]
-    public class SystemBehaviourHost : MonoBehaviour
+    [AddComponentMenu("Fake/Systems/FakeSystem Host")]
+    public class FakeSystemHost : MonoBehaviour
     {
-        private FakeSystemManager Manager;
+        private FakeSystemLoop Manager;
 
         private void Awake()
         {
-            Manager = new FakeSystemManager();
+            Manager = new FakeSystemLoop();
             CollectSystems(transform);
         }
 
@@ -46,7 +46,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 var child = root.GetChild(i).gameObject;
 
-                var breakpoint = child.GetComponent<SystemBehaviourHost>();
+                var breakpoint = child.GetComponent<FakeSystemHost>();
                 if (breakpoint != null) continue;
 
                 var system = child.GetComponent<IFakeSystem>();

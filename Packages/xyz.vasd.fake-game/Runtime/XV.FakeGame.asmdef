@@ -1,7 +1,10 @@
 {
-    "name": "XV.Fake.Database.Runtime",
-    "rootNamespace": "Xyz.Vasd.Fake.Database",
-    "references": [],
+    "name": "XV.Fake Game",
+    "rootNamespace": "Xyz.Vasd.FakeGame",
+    "references": [
+        "GUID:c8e02434907ef1c4fadc8c098d0b2923",
+        "GUID:c7797b931bce69d49b1e3c5c861ec0b4"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

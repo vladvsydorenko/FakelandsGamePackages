@@ -1,5 +1,5 @@
 {
-    "name": "XV.Fake.Systems.Runtime",
+    "name": "XV.Fake.Systems",
     "rootNamespace": "Xyz.Vasd.Fake.Systems",
     "references": [],
     "includePlatforms": [],

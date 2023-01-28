@@ -282,8 +282,8 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake.context": {
-      "version": "file:xyz.vasd.fake.context",
+    "xyz.vasd.fake-game": {
+      "version": "file:xyz.vasd.fake-game",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
