@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using TMPro;
+using UnityEngine;
 using Xyz.Vasd.Fake.Database;
 using Xyz.Vasd.FakeGame.Core;
 using Xyz.Vasd.FakeGame.Data;
@@ -8,63 +10,75 @@ namespace Xyz.Vasd.FakeGame.Systems
     [AddComponentMenu("Fake Game/Systems/Preloader System")]
     public class PreloaderSystem : DataSystem
     {
-        private FakeGroup _newRequests;
-        private FakeGroup _activeRequests;
+        [Header("Text")]
+        public string Text;
+        public float TextSpeed;
 
-        [ContextMenu("Test()")]
-        private void Test()
-        {
-            Context.DB.CreateEntry(new PreloadRequest());
-        }
+        [Header("Extra")]
+        public string Extra;
+        public float ExtraSpeed;
+
+        [Header("Refs")]
+        public TextMeshProUGUI TextElement;
+
+        private float _startTime;
 
         public override void OnSystemStart()
         {
-            _newRequests = Context.DB
-                .CreateGroupDescriptor()
-                .Include<PreloadRequest>()
-                .Exclude<PreloaderState>()
-                .ToGroup();
-
-            _activeRequests = Context.DB
-                .CreateGroupDescriptor()
-                .Include<PreloadRequest, PreloaderState>()
-                .ToGroup();
+            _startTime = Time.time;
         }
 
         public override void OnSystemUpdate()
         {
-            foreach (var page in _newRequests.Pages)
-            {
-                var entries = page.GetEntries();
-                var requests = page.GetDataArray<PreloadRequest>();
+            var timeSpent = Time.time - _startTime;
+            var textTime = TextSpeed * Text.Length;
 
-                for (int i = 0; i < page.Count; i++)
-                {
-                    var entry = entries[i];
-                    var request = requests[i];
+            var extraTime = Mathf.Clamp(timeSpent - textTime, 0.0f, 1.0f);
 
-                    // handle preload request
+            var textProgress = Mathf.Clamp(timeSpent / textTime, 0.0f, 1.0f);
 
-                    request.SaySomething();
-                    Context.DB.SetData(entry, new PreloaderState());
-                }
-            }
+            var textLength = (int)(Text.Length * textProgress);
+            var extraLength = (int)(extraTime / ExtraSpeed);
 
-            foreach (var page in _activeRequests.Pages)
-            {
-                var entries = page.GetEntries();
-                var requests = page.GetDataArray<PreloadRequest>();
-                var states = page.GetDataArray<PreloaderState>();
+            var text = "";
+            if (textLength > 0) text = Text.Substring(0, textLength);
 
-                for (int i = 0; i < page.Count; i++)
-                {
-                    var entry = entries[i];
-                    var request = requests[i];
-                    var state = states[i];
+            var extra = string.Concat(Enumerable.Repeat(Extra, extraLength));
 
-                    // handle active preload request, update status
-                }
-            }
+            TextElement.text = text + extra;
+
+            //foreach (var page in _newRequests.Pages)
+            //{
+            //    var entries = page.GetEntries();
+            //    var requests = page.GetDataArray<PreloadRequest>();
+
+                //    for (int i = 0; i < page.Count; i++)
+                //    {
+                //        var entry = entries[i];
+                //        var request = requests[i];
+
+                //        // handle preload request
+
+                //        request.SaySomething();
+                //        Context.DB.SetData(entry, new PreloaderState());
+                //    }
+                //}
+
+                //foreach (var page in _activeRequests.Pages)
+                //{
+                //    var entries = page.GetEntries();
+                //    var requests = page.GetDataArray<PreloadRequest>();
+                //    var states = page.GetDataArray<PreloaderState>();
+
+                //    for (int i = 0; i < page.Count; i++)
+                //    {
+                //        var entry = entries[i];
+                //        var request = requests[i];
+                //        var state = states[i];
+
+                //        // handle active preload request, update status
+                //    }
+                //}
         }
     }
 
