@@ -1,104 +1,99 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Xyz.Vasd.Fake.Database;
 using Xyz.Vasd.FakeGame.Core;
 using Xyz.Vasd.FakeGame.Data;
 
 namespace Xyz.Vasd.FakeGame.Systems
 {
-    [AddComponentMenu("Fake Game/Systems/Preloader System")]
     public class PreloaderSystem : DataSystem
     {
-        [Header("Text")]
-        public string Text;
-        public float TextSpeed;
 
-        [Header("Extra")]
+        [Tooltip("Main text will be shown even if loading is faster")]
+        public string MainText;
+        [Tooltip("Speed per character")]
+        public float MainTextSpeed;
+        public TextMeshProUGUI MainTextElement;
+
+        [Tooltip("Extra text will be repeated endless")]
         public string ExtraText;
-        public float ExtraSpeed;
+        [Tooltip("Speed per character")]
+        public float ExtraTextSpeed;
+        public TextMeshProUGUI ExtraTextElement;
 
-        [Header("Prefixes")]
-        public string WaitingPrefix;
-        public string DonePrefix;
+        private float _time;
+        private float _start;
+        private float _spent;
+        private float _extraSpent;
+        private AsyncOperationHandle _downloadHandle;
 
-        [Header("Refs")]
-        public TextMeshProUGUI TextElement;
-        public AssetReferenceGameObject LoaderPrefabLink;
-
-        private float _startTime;
+        private string _mainText;
+        private string _extraText;
 
         public override void OnSystemStart()
         {
-            _startTime = Time.time;
-            if(LoaderPrefabLink != null) LoaderPrefabLink.LoadAssetAsync();
+            //_state.SizeHandle = Addressables.GetDownloadSizeAsync(Settings.Labels);
+            //_state.DownloadHandle = Addressables.DownloadDependenciesAsync(Settings.Labels);
+
+            _start = Time.time;
         }
 
         public override void OnSystemUpdate()
         {
-            var timeSpent = Time.time - _startTime;
-            var textTime = TextSpeed * Text.Length;
+            _time = Time.time;
+            _spent = _time - _start;
+            _extraSpent = Mathf.Clamp(_spent - (float)(MainText.Length * MainTextSpeed), 0f, float.MaxValue);
 
-            var extraTime = Mathf.Clamp(timeSpent - textTime, 0.0f, float.MaxValue);
+            _mainText = CalculateMainText();
+            _extraText = CalculateExtraText();
 
-            var textProgress = Mathf.Clamp(timeSpent / textTime, 0.0f, 1.0f);
+            RefreshView();
+        }
 
-            var textLength = (int)(Text.Length * textProgress);
-            var extraLength = (int)(extraTime / ExtraSpeed);
+        private string CalculateMainText()
+        {
+            var progress = _spent / MainTextSpeed;
+            if (progress <= 0f) return "";
 
-            var text = "";
-            if (textLength > 0) text = Text.Substring(0, textLength);
+            var len = (int)(MainText.Length * progress);
 
-            var extra = string.Concat(Enumerable.Repeat(ExtraText, extraLength));
-
-
-            if (textLength == Text.Length)
+            if (len >= MainText.Length)
             {
-                if (LoaderPrefabLink.IsDone)
-                {
-                    text = DonePrefix + text;
-                }
-            }
-            else
-            {
-                text = WaitingPrefix + text;
-            }
+                Debug.Log("YEAH!");
+                return MainText;
+            };
 
-            TextElement.text = text + extra;
+            return MainText[..len];
+        }
 
-            //foreach (var page in _newRequests.Pages)
-            //{
-            //    var entries = page.GetEntries();
-            //    var requests = page.GetDataArray<PreloadRequest>();
+        private string CalculateExtraText()
+        {
+            var progress = _extraSpent / ExtraTextSpeed;
+            Debug.Log($"_spent {(float)(_spent)}");
+            Debug.Log($"_textDuration {(float)(MainText.Length * MainTextSpeed)}");
+            Debug.Log($"_extraSpent {_extraSpent}");
+            if (progress <= 0f) return "";
 
-            //    for (int i = 0; i < page.Count; i++)
-            //    {
-            //        var entry = entries[i];
-            //        var request = requests[i];
+            var len = (int)(ExtraText.Length * progress);
+            var repeats = (int)Mathf.Floor(len / ExtraText.Length);
 
-            //        // handle preload request
+            var text = string.Concat(Enumerable.Repeat(ExtraText, repeats));
 
-            //        request.SaySomething();
-            //        Context.DB.SetData(entry, new PreloaderState());
-            //    }
-            //}
+            len -= (repeats * ExtraText.Length);
 
-            //foreach (var page in _activeRequests.Pages)
-            //{
-            //    var entries = page.GetEntries();
-            //    var requests = page.GetDataArray<PreloadRequest>();
-            //    var states = page.GetDataArray<PreloaderState>();
+            if (len <= 0) return text;
 
-            //    for (int i = 0; i < page.Count; i++)
-            //    {
-            //        var entry = entries[i];
-            //        var request = requests[i];
-            //        var state = states[i];
+            return text + ExtraText[..len];
+        }
 
-            //        // handle active preload request, update status
-            //    }
-            //}
+        private void RefreshView()
+        {
+            if (MainTextElement != null) MainTextElement.text = _mainText;
+            if (ExtraTextElement != null) ExtraTextElement.text = _extraText;
         }
     }
 
