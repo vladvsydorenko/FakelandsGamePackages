@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Xyz.Vasd.Fake.Database;
 using Xyz.Vasd.FakeGame.Core;
 using Xyz.Vasd.FakeGame.Data;
@@ -15,17 +16,23 @@ namespace Xyz.Vasd.FakeGame.Systems
         public float TextSpeed;
 
         [Header("Extra")]
-        public string Extra;
+        public string ExtraText;
         public float ExtraSpeed;
+
+        [Header("Prefixes")]
+        public string WaitingPrefix;
+        public string DonePrefix;
 
         [Header("Refs")]
         public TextMeshProUGUI TextElement;
+        public AssetReferenceGameObject LoaderPrefabLink;
 
         private float _startTime;
 
         public override void OnSystemStart()
         {
             _startTime = Time.time;
+            if(LoaderPrefabLink != null) LoaderPrefabLink.LoadAssetAsync();
         }
 
         public override void OnSystemUpdate()
@@ -33,7 +40,7 @@ namespace Xyz.Vasd.FakeGame.Systems
             var timeSpent = Time.time - _startTime;
             var textTime = TextSpeed * Text.Length;
 
-            var extraTime = Mathf.Clamp(timeSpent - textTime, 0.0f, 1.0f);
+            var extraTime = Mathf.Clamp(timeSpent - textTime, 0.0f, float.MaxValue);
 
             var textProgress = Mathf.Clamp(timeSpent / textTime, 0.0f, 1.0f);
 
@@ -43,7 +50,20 @@ namespace Xyz.Vasd.FakeGame.Systems
             var text = "";
             if (textLength > 0) text = Text.Substring(0, textLength);
 
-            var extra = string.Concat(Enumerable.Repeat(Extra, extraLength));
+            var extra = string.Concat(Enumerable.Repeat(ExtraText, extraLength));
+
+
+            if (textLength == Text.Length)
+            {
+                if (LoaderPrefabLink.IsDone)
+                {
+                    text = DonePrefix + text;
+                }
+            }
+            else
+            {
+                text = WaitingPrefix + text;
+            }
 
             TextElement.text = text + extra;
 
@@ -52,33 +72,33 @@ namespace Xyz.Vasd.FakeGame.Systems
             //    var entries = page.GetEntries();
             //    var requests = page.GetDataArray<PreloadRequest>();
 
-                //    for (int i = 0; i < page.Count; i++)
-                //    {
-                //        var entry = entries[i];
-                //        var request = requests[i];
+            //    for (int i = 0; i < page.Count; i++)
+            //    {
+            //        var entry = entries[i];
+            //        var request = requests[i];
 
-                //        // handle preload request
+            //        // handle preload request
 
-                //        request.SaySomething();
-                //        Context.DB.SetData(entry, new PreloaderState());
-                //    }
-                //}
+            //        request.SaySomething();
+            //        Context.DB.SetData(entry, new PreloaderState());
+            //    }
+            //}
 
-                //foreach (var page in _activeRequests.Pages)
-                //{
-                //    var entries = page.GetEntries();
-                //    var requests = page.GetDataArray<PreloadRequest>();
-                //    var states = page.GetDataArray<PreloaderState>();
+            //foreach (var page in _activeRequests.Pages)
+            //{
+            //    var entries = page.GetEntries();
+            //    var requests = page.GetDataArray<PreloadRequest>();
+            //    var states = page.GetDataArray<PreloaderState>();
 
-                //    for (int i = 0; i < page.Count; i++)
-                //    {
-                //        var entry = entries[i];
-                //        var request = requests[i];
-                //        var state = states[i];
+            //    for (int i = 0; i < page.Count; i++)
+            //    {
+            //        var entry = entries[i];
+            //        var request = requests[i];
+            //        var state = states[i];
 
-                //        // handle active preload request, update status
-                //    }
-                //}
+            //        // handle active preload request, update status
+            //    }
+            //}
         }
     }
 

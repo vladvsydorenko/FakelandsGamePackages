@@ -202,6 +202,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3434e043cdf514db363bb268df5759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Text: Fakelands
+  TextSpeed: 0.3
+  ExtraText: .
+  ExtraSpeed: 1
+  WaitingPrefix: (Wait...)
+  DonePrefix: (Ready)
+  TextElement: {fileID: 888472361}
+  LoaderPrefabLink:
+    m_AssetGUID: ed872ca18aa85464fbac9920f4cec335
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
 --- !u!1 &643748077
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +391,7 @@ GameObject:
   - component: {fileID: 888472362}
   - component: {fileID: 888472361}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Intro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,13 +404,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888472359}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1932795974}
-  m_RootOrder: 0
+  m_Father: {fileID: 2099618476}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -425,7 +437,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fakelands...
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1064,7 +1076,7 @@ GameObject:
   - component: {fileID: 1932795976}
   - component: {fileID: 1932795975}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1081,8 +1093,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 888472360}
+  m_Children: []
   m_Father: {fileID: 2099618476}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1161,6 +1172,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1932795974}
+  - {fileID: 888472360}
   m_Father: {fileID: 578577244}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1226,7 +1238,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
