@@ -4,12 +4,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Xyz.Vasd.Fake.Database;
 using Xyz.Vasd.FakeGame.Core;
-using Xyz.Vasd.FakeGame.Data;
 
 namespace Xyz.Vasd.FakeGame.Systems
 {
+    public enum ViewStage
+    {
+        Closed,
+        Opening,
+        Open,
+        Closing,
+    }
+    public interface IView
+    {
+        void OpenView();
+        void HideView();
+
+        ViewStage GetViewStage();
+        bool IsDone();
+    }
+
     public class PreloaderSystem : DataSystem
     {
 
@@ -17,6 +31,7 @@ namespace Xyz.Vasd.FakeGame.Systems
         public string MainText;
         [Tooltip("Speed per character")]
         public float MainTextSpeed;
+        public float MainTextDelay;
         public TextMeshProUGUI MainTextElement;
 
         [Tooltip("Extra text will be repeated endless")]
@@ -36,8 +51,7 @@ namespace Xyz.Vasd.FakeGame.Systems
 
         public override void OnSystemStart()
         {
-            //_state.SizeHandle = Addressables.GetDownloadSizeAsync(Settings.Labels);
-            //_state.DownloadHandle = Addressables.DownloadDependenciesAsync(Settings.Labels);
+            _downloadHandle = Addressables.DownloadDependenciesAsync("preload");
 
             _start = Time.time;
         }
@@ -45,25 +59,34 @@ namespace Xyz.Vasd.FakeGame.Systems
         public override void OnSystemUpdate()
         {
             _time = Time.time;
-            _spent = _time - _start;
+            _spent = Mathf.Clamp(_time - MainTextDelay - _start, 0f, float.MaxValue);
             _extraSpent = Mathf.Clamp(_spent - (float)(MainText.Length * MainTextSpeed), 0f, float.MaxValue);
 
             _mainText = CalculateMainText();
-            _extraText = CalculateExtraText();
+
+            if (_mainText == MainText && _downloadHandle.IsDone)
+            {
+                if (_downloadHandle.IsValid()) Addressables.Release(_downloadHandle);
+                _mainText = "READY";
+                _extraText = "^^^^^";
+            }
+            else
+            {
+                _extraText = CalculateExtraText();
+            }
 
             RefreshView();
         }
 
         private string CalculateMainText()
         {
-            var progress = _spent / MainTextSpeed;
+            var progress = (_spent / MainTextSpeed) / MainText.Length;
             if (progress <= 0f) return "";
 
             var len = (int)(MainText.Length * progress);
 
             if (len >= MainText.Length)
             {
-                Debug.Log("YEAH!");
                 return MainText;
             };
 
@@ -72,10 +95,7 @@ namespace Xyz.Vasd.FakeGame.Systems
 
         private string CalculateExtraText()
         {
-            var progress = _extraSpent / ExtraTextSpeed;
-            Debug.Log($"_spent {(float)(_spent)}");
-            Debug.Log($"_textDuration {(float)(MainText.Length * MainTextSpeed)}");
-            Debug.Log($"_extraSpent {_extraSpent}");
+            var progress = (_extraSpent / ExtraTextSpeed) / ExtraText.Length;
             if (progress <= 0f) return "";
 
             var len = (int)(ExtraText.Length * progress);
@@ -97,4 +117,76 @@ namespace Xyz.Vasd.FakeGame.Systems
         }
     }
 
+    public class ApplicationSystem : DataSystem
+    {
+        private enum AppStage
+        {
+            Start,
+            Preloading,
+            MenuLoading,
+            MenuLoader_Show,
+            MenuLoader_Running,
+            Menu_Show,
+        }
+
+        public GameObject PreloaderRoot;
+        public GameObject LoaderRoot;
+
+        private AppStage _stage;
+
+        private IView PreloaderView;
+        private IView MenuLoaderView;
+
+        public override void OnSystemUpdate()
+        {
+            // show preloader
+            // hide preloader
+            // show loader
+            // hide loader
+
+            switch (_stage)
+            {
+                case AppStage.Start:
+                case AppStage.Preloading:
+                    switch (PreloaderView.GetViewStage())
+                    {
+                        case ViewStage.Closed:
+                        case ViewStage.Closing:
+                            PreloaderView.OpenView();
+                            break;
+                        case ViewStage.Open:
+                            if (!PreloaderView.IsDone()) break;
+                            _stage = AppStage.MenuLoading;
+                            break;
+                        case ViewStage.Opening:
+                        default:
+                            break;
+                    }
+                    break;
+                case AppStage.MenuLoading:
+                    switch (MenuLoaderView.GetViewStage())
+                    {
+                        case ViewStage.Closed:
+                        case ViewStage.Closing:
+                            MenuLoaderView.OpenView();
+                            break;
+                        case ViewStage.Opening:
+                            break;
+                        case ViewStage.Open:
+                            if (PreloaderView.GetViewStage() != ViewStage.Closed)
+                            {
+                                PreloaderView.HideView();
+                            }
+                            if (!MenuLoaderView.IsDone()) break;
+                            MenuLoaderView.HideView();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
