@@ -49,8 +49,14 @@ namespace Xyz.Vasd.Fake.Systems
                 var breakpoint = child.GetComponent<FakeSystemHost>();
                 if (breakpoint != null) continue;
 
-                var system = child.GetComponent<IFakeSystem>();
-                if (system != null) Manager.AddSystem(system);
+                var systems = child.GetComponents<IFakeSystem>();
+                foreach (var system in systems)
+                {
+                    if (system != null)
+                    {
+                        Manager.AddSystem(system);
+                    }
+                }
 
                 CollectSystems(child.transform, clear: false);
             }

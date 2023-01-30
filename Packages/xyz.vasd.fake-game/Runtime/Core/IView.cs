@@ -14,4 +14,9 @@
         void OpenView();
         void CloseView();
     }
+
+    public interface ILoaderView : IView
+    {
+        public bool IsLoaded();
+    }
 }

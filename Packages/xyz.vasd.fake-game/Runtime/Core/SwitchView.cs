@@ -1,31 +1,33 @@
 ﻿using UnityEngine;
 using Xyz.Vasd.Fake.Systems;
-using Xyz.Vasd.FakeGame.Views;
+using Xyz.Vasd.FakeGame.Pages;
 
 namespace Xyz.Vasd.FakeGame.Core
 {
     public class SwitchView : SystemBehaviour
     {
-        public SimplePageView TestView1;
-        public SimplePageView TestView2;
+        public BaseView TestView1;
+        public BaseView TestView2;
 
         [ContextMenu("ShowTestView1")]
         public void ShowTestView1()
         {
-            ShowView(TestView1);
+            OpenView(TestView1);
         }
 
         [ContextMenu("ShowTestView2")]
         public void ShowTestView2()
         {
-            ShowView(TestView2);
+            OpenView(TestView2);
         }
 
         public IView View { get; private set; }
         public IView LastView { get; private set; }
 
-        public void ShowView(IView view)
+        public void OpenView(IView view)
         {
+            if (view == View) return;
+
             LastView = View;
             View = view;
         }
@@ -44,7 +46,10 @@ namespace Xyz.Vasd.FakeGame.Core
             var isLastClosed = IsViewClosed(LastView);
             var isLastClosing = IsViewClosing(LastView);
 
-            if (!isLastClosed && !isLastClosing && LastView != null) LastView.CloseView();
+            if (!isLastClosed && !isLastClosing && LastView != null)
+            {
+                LastView.CloseView();
+            }
         }
 
         private bool IsViewOpen(IView view)
