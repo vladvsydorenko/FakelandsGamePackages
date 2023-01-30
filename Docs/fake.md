@@ -35,3 +35,19 @@ In this way, game structure may look like:
 # Set/Get Data
 To set or get data first parent's context will be used.
 As context is just a monobeahaviour it could be referenced as any property.
+
+
+# Pages
+Pages are views that could be shown only one at a time.
+There are transitions between pages.
+
+page.Open();
+page.Close();
+
+menu/main&&settings/sound&&alert/01
+
+menu/main
+settings/sound
+alert/01
+
+view dependencies
