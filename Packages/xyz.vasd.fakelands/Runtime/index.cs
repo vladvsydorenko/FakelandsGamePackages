@@ -10,7 +10,5 @@ namespace Xyz.Vasd.Fakelands
 {
     public class GameWindowSystem : FakeSystem
     {
-        [FakeData]
-        public int T;
     }
 }

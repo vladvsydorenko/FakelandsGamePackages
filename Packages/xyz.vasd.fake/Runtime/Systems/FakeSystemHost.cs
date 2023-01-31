@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Xyz.Vasd.Fake.Data;
 
 namespace Xyz.Vasd.Fake.Systems
 {
@@ -8,7 +9,7 @@ namespace Xyz.Vasd.Fake.Systems
         public bool AutoStart;
         private FakeSystemRunner _runner = new();
 
-        protected virtual void Awake()
+        private void Awake()
         {
             if (AutoStart) StartSystemHost();
         }
@@ -16,25 +17,16 @@ namespace Xyz.Vasd.Fake.Systems
         public void AddSystem(IFakeSystem system, GameObject go)
         {
             _runner.AddSystem(system);
-            OnAddSystem(system, go);
-        }
-        protected virtual void OnAddSystem(IFakeSystem system, GameObject go)
-        {
-
+            FakeDataInjector.InjectData(go);
         }
 
         public void StartSystemHost()
         {
             _runner.ClearSystems();
             CollectSystems(transform);
-            OnStartSystemHost();
-        }
-        protected virtual void OnStartSystemHost()
-        {
-
         }
 
-        protected virtual void CollectSystems(Transform root)
+        private void CollectSystems(Transform root)
         {
             for (int i = 0; i < root.childCount; i++)
             {
