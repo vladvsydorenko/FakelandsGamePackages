@@ -14,35 +14,6 @@ namespace Xyz.Vasd.Fakelands
 /// </summary>
 namespace Xyz.Vasd.Fakelands
 {
-    public class SingletonSource<T> : IDataSource<T> where T : class, new()
-    {
-        private T _singleton = new();
-
-        public T GetSourceData()
-        {
-            return _singleton;
-        }
-    }
-
-    public class SystemBehaviour : MonoBehaviour, ISystem
-    {
-        void ISystem.SystemStart()
-        {
-        }
-
-        void ISystem.SystemUpdate()
-        {
-        }
-
-        void ISystem.SystemFixedUpdate()
-        {
-        }
-
-        void ISystem.SystemStop()
-        {
-        }
-
-    }
 }
 
 /// <summary>
@@ -58,11 +29,13 @@ namespace Xyz.Vasd.Fakelands
     /// <summary>
     /// Injects data into fields of marked components
     /// </summary>
-    public class DataInjector : MonoBehaviour
+    public class FakeDataInjector : MonoBehaviour
     {
+        public bool InjectOnAwake;
+
         private void Awake()
         {
-            InjectData();
+            if (InjectOnAwake) InjectData();
         }
 
         [ContextMenu(nameof(InjectData) + "()")]
@@ -78,7 +51,7 @@ namespace Xyz.Vasd.Fakelands
             foreach (var component in components)
             {
                 var type = component.GetType();
-                var typeAttrs = type.GetCustomAttributes(typeof(InjectAttribute), true);
+                var typeAttrs = type.GetCustomAttributes(typeof(FakeDataAttribute), true);
                 if (typeAttrs.Length < 1) continue;
 
                 InjectData(component);
@@ -95,7 +68,7 @@ namespace Xyz.Vasd.Fakelands
                 object[] attrs = field.GetCustomAttributes(false);
                 foreach (object attr in attrs)
                 {
-                    var contextAttr = attr as InjectAttribute;
+                    var contextAttr = attr as FakeDataAttribute;
                     if (contextAttr != null)
                     {
                         var dataType = typeof(IDataSource<>).MakeGenericType(field.FieldType);
@@ -111,7 +84,7 @@ namespace Xyz.Vasd.Fakelands
     /// <summary>
     /// Tags field to be injected from context
     /// </summary>
-    public class InjectAttribute : Attribute
+    public class FakeDataAttribute : Attribute
     {
 
     }
@@ -128,5 +101,29 @@ namespace Xyz.Vasd.Fakelands
         void SystemUpdate();
         void SystemFixedUpdate();
         void SystemStop();
+    }
+
+    public class SystemBehaviour : MonoBehaviour, ISystem
+    {
+        protected virtual void Awake()
+        {
+            FakeDataInjector.InjectData(this);
+        }
+
+        void ISystem.SystemStart()
+        {
+        }
+
+        void ISystem.SystemUpdate()
+        {
+        }
+
+        void ISystem.SystemFixedUpdate()
+        {
+        }
+
+        void ISystem.SystemStop()
+        {
+        }
     }
 }
