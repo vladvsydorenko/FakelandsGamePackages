@@ -55,6 +55,9 @@ namespace Xyz.Vasd.Fakelands
         T GetSourceData();
     }
 
+    /// <summary>
+    /// Injects data into fields of marked components
+    /// </summary>
     public class DataInjector : MonoBehaviour
     {
         private void Awake()
@@ -65,16 +68,7 @@ namespace Xyz.Vasd.Fakelands
         [ContextMenu(nameof(InjectData) + "()")]
         public void InjectData()
         {
-            var components = GetComponents<Component>();
-
-            foreach (var component in components)
-            {
-                var type = component.GetType();
-                var typeAttrs = type.GetCustomAttributes(typeof(InjectAttribute), true);
-
-                if (typeAttrs.Length < 1) continue;
-                InjectData(component);
-            }
+            InjectData(gameObject);
         }
 
         public static void InjectData(GameObject go)
@@ -83,6 +77,10 @@ namespace Xyz.Vasd.Fakelands
 
             foreach (var component in components)
             {
+                var type = component.GetType();
+                var typeAttrs = type.GetCustomAttributes(typeof(InjectAttribute), true);
+                if (typeAttrs.Length < 1) continue;
+
                 InjectData(component);
             }
         }
