@@ -28,17 +28,4 @@ namespace Xyz.Vasd.Fake.Systems
         }
     }
 
-    //[AddComponentMenu("")]
-    //public class SystemBehaviour<T> : SystemBehaviour where T : Component
-    //{
-    //    protected T Context;
-
-    //    public override bool IsSystemEnabled => base.IsSystemEnabled && Context != null;
-
-    //    public override void OnSystemAwake()
-    //    {
-    //        Debug.Log("awake?");
-    //        Context = GetComponentInParent<T>();
-    //    }
-    //}
 }

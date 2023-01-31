@@ -51,3 +51,6 @@ settings/sound
 alert/01
 
 view dependencies
+
+# Structure
+FakeContext

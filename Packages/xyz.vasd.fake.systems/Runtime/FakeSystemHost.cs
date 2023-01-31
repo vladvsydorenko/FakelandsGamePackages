@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Systems
 {
@@ -54,11 +55,35 @@ namespace Xyz.Vasd.Fake.Systems
                 {
                     if (system != null)
                     {
-                        Manager.AddSystem(system);
+                        AddSystem(system, child);
                     }
                 }
 
                 CollectSystems(child.transform, clear: false);
+            }
+        }
+
+        private void AddSystem(IFakeSystem system, GameObject go)
+        {
+            Manager.AddSystem(system);
+
+            var type = system.GetType();
+
+            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                object[] attrs = field.GetCustomAttributes(false);
+                foreach (object attr in attrs)
+                {
+                    var contextAttr = attr as SystemContextAttribute;
+                    if (contextAttr != null)
+                    {
+                        var dataType = typeof(ISystemContext<>).MakeGenericType(field.FieldType);
+                        var source = go.GetComponentInParent(dataType);
+                        var method = dataType.GetMethod(nameof(ISystemContext.GetSystemContextData));
+                        field.SetValue(system, method.Invoke(source, new object[0]));
+                    }
+                }
             }
         }
     }

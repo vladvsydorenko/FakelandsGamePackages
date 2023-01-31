@@ -294,6 +294,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "xyz.vasd.fakelands": {
+      "version": "file:xyz.vasd.fakelands",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

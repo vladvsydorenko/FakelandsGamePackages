@@ -16,22 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: b090d0b54821ab944973c1ebae48ea30
-  m_SerializeEntries:
-  - m_GUID: ed872ca18aa85464fbac9920f4cec335
-    m_Address: Assets/Tests/Cube.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - loading
-  - m_GUID: fd58a9f27722a364db5ce5b883614e31
-    m_Address: Assets/Tests/white-concrete-wall.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - loading
-  - m_GUID: c58eb92efce4bb74bbfb38bdd5587ef4
-    m_Address: Assets/Tests/Preload
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - loading
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d626631aefcef940b08b90ea8e61040, type: 2}
   m_SchemaSet:
