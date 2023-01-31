@@ -1,4 +1,4 @@
-﻿namespace Xyz.Vasd.Fake.Database
+﻿namespace Xyz.Vasd.Fake.Data.Database
 {
     public struct FakeEntry
     {

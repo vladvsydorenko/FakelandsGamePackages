@@ -1,12 +1,11 @@
 {
-    "name": "XV.Fake Game",
-    "rootNamespace": "Xyz.Vasd.FakeGame",
+    "name": "XV.Fake",
+    "rootNamespace": "Xyz.Vasd.Fake",
     "references": [
-        "GUID:c8e02434907ef1c4fadc8c098d0b2923",
+        "GUID:eed2883d7f8a6a841aca8dae3b7ee939",
         "GUID:c7797b931bce69d49b1e3c5c861ec0b4",
         "GUID:84651a3751eca9349aac36a66bba901b",
-        "GUID:9e24947de15b9834991c9d8411ea37cf",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:9e24947de15b9834991c9d8411ea37cf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

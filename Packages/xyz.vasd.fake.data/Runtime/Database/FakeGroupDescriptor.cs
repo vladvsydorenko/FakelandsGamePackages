@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Xyz.Vasd.Fake.Database
+namespace Xyz.Vasd.Fake.Data.Database
 {
     public class FakeGroupDescriptor
     {

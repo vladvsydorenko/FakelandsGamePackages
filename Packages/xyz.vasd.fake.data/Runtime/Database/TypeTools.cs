@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xyz.Vasd.Fake.Database
+namespace Xyz.Vasd.Fake.Data.Database
 {
     internal static class TypeTools
     {

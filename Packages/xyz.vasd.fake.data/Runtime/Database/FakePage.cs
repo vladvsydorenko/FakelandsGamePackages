@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Xyz.Vasd.Fake.Database
+namespace Xyz.Vasd.Fake.Data.Database
 {
     public partial class FakePage
     {
