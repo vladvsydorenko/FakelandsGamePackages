@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Systems
-/// </summary>
-namespace Xyz.Vasd.Fakelands.Systems
+namespace Xyz.Vasd.Fake.Systems
 {
-    internal class FakeSystemRunner
+    public class FakeSystemRunner
     {
         internal List<IFakeSystem> Systems;
 
@@ -14,7 +11,7 @@ namespace Xyz.Vasd.Fakelands.Systems
         internal List<IFakeSystem> UpdateSystems;
         internal List<IFakeSystem> StopSystems;
 
-        internal FakeSystemRunner()
+        public FakeSystemRunner()
         {
             Systems = new List<IFakeSystem>();
             StartSystems = new List<IFakeSystem>();
@@ -23,13 +20,13 @@ namespace Xyz.Vasd.Fakelands.Systems
         }
 
         #region Add/Clear
-        internal void AddSystem(IFakeSystem system)
+        public void AddSystem(IFakeSystem system)
         {
             Systems.Add(system);
             StartSystems.Add(system);
         }
 
-        internal void ClearSystems()
+        public void ClearSystems()
         {
             Systems.Clear();
             StartSystems.Clear();
@@ -39,7 +36,7 @@ namespace Xyz.Vasd.Fakelands.Systems
         #endregion
 
         #region Start/Stop
-        internal void StartAllSystems()
+        public void StartAllSystems()
         {
             StartSystems.Clear();
             foreach (var system in Systems)
@@ -51,7 +48,7 @@ namespace Xyz.Vasd.Fakelands.Systems
             UpdateSystems.Clear();
         }
 
-        internal void StopAllSystem()
+        public void StopAllSystem()
         {
             StopSystems.Clear();
             foreach (var system in Systems)
@@ -71,7 +68,7 @@ namespace Xyz.Vasd.Fakelands.Systems
         #endregion
 
         #region Loop
-        internal void Stage_Start()
+        public void Stage_Start()
         {
             foreach (var system in StartSystems)
             {
@@ -89,7 +86,7 @@ namespace Xyz.Vasd.Fakelands.Systems
             StartSystems.Clear();
         }
 
-        internal void Stage_Update()
+        public void Stage_Update()
         {
             foreach (var system in UpdateSystems)
             {
@@ -104,7 +101,7 @@ namespace Xyz.Vasd.Fakelands.Systems
             }
         }
 
-        internal void Stage_FixedUpdate()
+        public void Stage_FixedUpdate()
         {
             foreach (var system in UpdateSystems)
             {
@@ -119,7 +116,7 @@ namespace Xyz.Vasd.Fakelands.Systems
             }
         }
 
-        internal void Stage_Stop()
+        public void Stage_Stop()
         {
             foreach (var system in StopSystems)
             {

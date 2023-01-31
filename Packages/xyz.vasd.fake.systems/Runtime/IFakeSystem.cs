@@ -1,7 +1,4 @@
-﻿/// <summary>
-/// Systems
-/// </summary>
-namespace Xyz.Vasd.Fakelands.Systems
+﻿namespace Xyz.Vasd.Fake.Systems
 {
     public interface IFakeSystem
     {
