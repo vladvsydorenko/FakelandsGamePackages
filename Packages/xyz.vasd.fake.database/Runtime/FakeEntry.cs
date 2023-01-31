@@ -1,15 +1,15 @@
 ﻿namespace Xyz.Vasd.Fake.Database
 {
-    public struct Entry
+    public struct FakeEntry
     {
         internal int a;
         internal int Id;
         internal int Page;
         internal int Index;
 
-        internal Entry Reset()
+        internal FakeEntry Reset()
         {
-            return new Entry
+            return new FakeEntry
             {
                 Id = Id,
                 Page = -1,
@@ -17,6 +17,6 @@
             };
         }
 
-        internal static readonly Entry Null = new Entry();
+        internal static readonly FakeEntry Null = new FakeEntry();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Data
 /// </summary>
-namespace Xyz.Vasd.Fakelands
+namespace Xyz.Vasd.Fake.Data
 {
     /// <summary>
     /// Injects data into fields of marked components
@@ -37,7 +37,7 @@ namespace Xyz.Vasd.Fakelands
                 InjectData(component);
             }
         }
-        
+
         public static void InjectData(Component component)
         {
             var type = component.GetType();

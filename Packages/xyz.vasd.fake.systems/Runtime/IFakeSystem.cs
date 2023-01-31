@@ -1,12 +1,13 @@
-﻿namespace Xyz.Vasd.Fake.Systems
+﻿/// <summary>
+/// Systems
+/// </summary>
+namespace Xyz.Vasd.Fakelands.Systems
 {
     public interface IFakeSystem
     {
-        bool IsSystemEnabled { get; }
-        void OnSystemAwake();
-        void OnSystemStart();
-        void OnSystemUpdate();
-        void OnSystemFixedUpdate();
-        void OnSystemStop();
+        void SystemStart();
+        void SystemUpdate();
+        void SystemFixedUpdate();
+        void SystemStop();
     }
 }

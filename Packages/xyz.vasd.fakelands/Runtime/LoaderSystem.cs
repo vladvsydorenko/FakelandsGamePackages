@@ -1,8 +1,6 @@
 ﻿namespace Xyz.Vasd.Fakelands
 {
-    public class LoaderSystem : FakeSystem
+    public class LoaderSystem
     {
-        [FakeData]
-        private int _db;
     }
 }

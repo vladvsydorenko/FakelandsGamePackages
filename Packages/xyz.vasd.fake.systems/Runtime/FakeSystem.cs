@@ -1,17 +1,9 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Systems
-/// </summary>
-namespace Xyz.Vasd.Fakelands
+namespace Xyz.Vasd.Fakelands.Systems
 {
     public class FakeSystem : MonoBehaviour, IFakeSystem
     {
-        protected virtual void Awake()
-        {
-            FakeDataInjector.InjectData(this);
-        }
-
         void IFakeSystem.SystemStart()
         {
         }

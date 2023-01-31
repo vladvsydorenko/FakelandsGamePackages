@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xyz.Vasd.Fakelands
+namespace Xyz.Vasd.Fake.Data
 {
     public interface IFakeDataSource
     {

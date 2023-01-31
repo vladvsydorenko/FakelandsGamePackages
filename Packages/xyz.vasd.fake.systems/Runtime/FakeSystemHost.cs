@@ -1,48 +1,40 @@
-﻿using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Xyz.Vasd.Fake.Systems
+namespace Xyz.Vasd.Fakelands.Systems
 {
-
-    [AddComponentMenu("Fake/Systems/System Host")]
     public class FakeSystemHost : MonoBehaviour
     {
-        private FakeSystemLoop Manager;
+        public bool AutoStart;
+        private FakeSystemRunner _runner;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            Manager = new FakeSystemLoop();
+            if (AutoStart) StartSystemHost();
+        }
+
+        public void AddSystem(IFakeSystem system, GameObject go)
+        {
+            _runner.AddSystem(system);
+            OnAddSystem(system, go);
+        }
+        protected virtual void OnAddSystem(IFakeSystem system, GameObject go)
+        {
+
+        }
+
+        public void StartSystemHost()
+        {
+            _runner.ClearSystems();
             CollectSystems(transform);
+            OnStartSystemHost();
+        }
+        protected virtual void OnStartSystemHost()
+        {
+
         }
 
-        private void OnEnable()
+        protected virtual void CollectSystems(Transform root)
         {
-            Manager.StartAllSystems();
-            Manager.Stage_Start();
-        }
-
-        private void OnDisable()
-        {
-            Manager.StopAllSystem();
-            Manager.Stage_Stop();
-        }
-
-        private void Update()
-        {
-            Manager.Stage_Start();
-            Manager.Stage_Update();
-            Manager.Stage_Stop();
-        }
-
-        private void FixedUpdate()
-        {
-            Manager.Stage_FixedUpdate();
-        }
-
-        private void CollectSystems(Transform root, bool clear = true)
-        {
-            if (clear) Manager.ClearSystems();
-
             for (int i = 0; i < root.childCount; i++)
             {
                 var child = root.GetChild(i).gameObject;
@@ -59,32 +51,9 @@ namespace Xyz.Vasd.Fake.Systems
                     }
                 }
 
-                CollectSystems(child.transform, clear: false);
+                CollectSystems(child.transform);
             }
         }
 
-        private void AddSystem(IFakeSystem system, GameObject go)
-        {
-            Manager.AddSystem(system);
-
-            var type = system.GetType();
-
-            var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach (var field in fields)
-            {
-                object[] attrs = field.GetCustomAttributes(false);
-                foreach (object attr in attrs)
-                {
-                    var contextAttr = attr as SystemContextAttribute;
-                    if (contextAttr != null)
-                    {
-                        var dataType = typeof(ISystemContext<>).MakeGenericType(field.FieldType);
-                        var source = go.GetComponentInParent(dataType);
-                        var method = dataType.GetMethod(nameof(ISystemContext.GetSystemContextData));
-                        field.SetValue(system, method.Invoke(source, new object[0]));
-                    }
-                }
-            }
-        }
     }
 }

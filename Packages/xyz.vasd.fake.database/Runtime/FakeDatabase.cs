@@ -57,22 +57,22 @@ namespace Xyz.Vasd.Fake.Database
     {
         internal List<FakePage> Pages = new();
         internal List<FakeGroup> Groups = new();
-        internal List<Entry> Entries = new();
-        internal List<Entry> RemovedEntries = new();
+        internal List<FakeEntry> Entries = new();
+        internal List<FakeEntry> RemovedEntries = new();
 
-        internal Entry GetEntry(Entry entry)
+        internal FakeEntry GetEntry(FakeEntry entry)
         {
             return Entries[entry.Id];
         }
 
-        internal void SetEntry(Entry entry)
+        internal void SetEntry(FakeEntry entry)
         {
             Entries[entry.Id] = entry;
         }
 
-        internal Entry PullEntry()
+        internal FakeEntry PullEntry()
         {
-            Entry entry;
+            FakeEntry entry;
 
             if (RemovedEntries.Count > 0)
             {
@@ -82,7 +82,7 @@ namespace Xyz.Vasd.Fake.Database
             }
             else
             {
-                entry = new Entry
+                entry = new FakeEntry
                 {
                     Id = Entries.Count,
                     Page = -1,
@@ -108,7 +108,7 @@ namespace Xyz.Vasd.Fake.Database
             return page;
         }
 
-        internal FakePage GetPage(Entry entry)
+        internal FakePage GetPage(FakeEntry entry)
         {
             if (entry.Page < 0 || entry.Page >= Pages.Count) return null;
             return Pages[entry.Page];
@@ -162,7 +162,7 @@ namespace Xyz.Vasd.Fake.Database
     #region Data
     public partial class FakeDatabase
     {
-        public Entry CreateEntry(params object[] values)
+        public FakeEntry CreateEntry(params object[] values)
         {
             var page = FindOrCreatePage(values);
             var entry = PullEntry();
@@ -179,7 +179,7 @@ namespace Xyz.Vasd.Fake.Database
             return entry;
         }
 
-        public void RemoveEntry(Entry entry)
+        public void RemoveEntry(FakeEntry entry)
         {
             entry = GetEntry(entry);
             var page = GetPage(entry);
@@ -193,7 +193,7 @@ namespace Xyz.Vasd.Fake.Database
             RemovedEntries.Add(entry);
         }
 
-        public object GetData(Type type, Entry entry)
+        public object GetData(Type type, FakeEntry entry)
         {
             entry = GetEntry(entry);
             var page = GetPage(entry);
@@ -203,7 +203,7 @@ namespace Xyz.Vasd.Fake.Database
             return page.GetData(type, entry);
         }
 
-        public void SetData(Type type, Entry entry, object value)
+        public void SetData(Type type, FakeEntry entry, object value)
         {
             entry = GetEntry(entry);
             var page = GetPage(entry);
@@ -221,12 +221,12 @@ namespace Xyz.Vasd.Fake.Database
             page.SetData(type, entry, value);
         }
 
-        public void SetData<T>(Entry entry, T value)
+        public void SetData<T>(FakeEntry entry, T value)
         {
             SetData(typeof(T), entry, value);
         }
 
-        public void RemoveData(Type type, Entry entry)
+        public void RemoveData(Type type, FakeEntry entry)
         {
             entry = GetEntry(entry);
             var page = GetPage(entry);
@@ -258,7 +258,7 @@ namespace Xyz.Vasd.Fake.Database
             return new FakeGroupDescriptor(this);
         }
 
-        private FakePage Move(Entry entry, Type[] types)
+        private FakePage Move(FakeEntry entry, Type[] types)
         {
             var page = GetPage(entry);
 

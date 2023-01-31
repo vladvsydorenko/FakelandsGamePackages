@@ -14,7 +14,7 @@ namespace Xyz.Vasd.Fake.Database
 
         internal readonly Type[] Types;
 
-        internal List<Entry> Entries;
+        internal List<FakeEntry> Entries;
 
         internal readonly IList[] Layers;
         internal readonly Dictionary<Type, IList> LayersMap;
@@ -27,7 +27,7 @@ namespace Xyz.Vasd.Fake.Database
             Capacity = 0;
 
             Types = types.Distinct().ToArray();
-            Entries = new List<Entry>();
+            Entries = new List<FakeEntry>();
 
             LayersMap = new Dictionary<Type, IList>();
             Layers = Types
@@ -44,7 +44,7 @@ namespace Xyz.Vasd.Fake.Database
         {
             for (int i = 0; i < size; i++)
             {
-                Entries.Add(Entry.Null);
+                Entries.Add(FakeEntry.Null);
             }
 
             for (int i = 0; i < Layers.Length; i++)
@@ -80,7 +80,7 @@ namespace Xyz.Vasd.Fake.Database
 
     public partial class FakePage
     {
-        public List<Entry> GetEntries()
+        public List<FakeEntry> GetEntries()
         {
             return Entries;
         }
@@ -96,7 +96,7 @@ namespace Xyz.Vasd.Fake.Database
             return GetDataArray(typeof(T)) as IList<T>;
         }
 
-        internal Entry Add(Entry entry)
+        internal FakeEntry Add(FakeEntry entry)
         {
             if (Count >= Capacity) Grow();
             var index = Count;
@@ -112,7 +112,7 @@ namespace Xyz.Vasd.Fake.Database
             return result;
         }
 
-        internal Entry Remove(Entry entry)
+        internal FakeEntry Remove(FakeEntry entry)
         {
             var index = entry.Index;
             var lastIndex = Count - 1;
@@ -127,14 +127,14 @@ namespace Xyz.Vasd.Fake.Database
             lastEntry.Index = index;
             Entries[index] = lastEntry;
 
-            Entries[lastIndex] = Entry.Null;
+            Entries[lastIndex] = FakeEntry.Null;
 
             Count--;
 
             return lastEntry;
         }
 
-        internal void Copy(Entry entry, FakePage target, Entry targetEntry)
+        internal void Copy(FakeEntry entry, FakePage target, FakeEntry targetEntry)
         {
             for (int i = 0; i < Layers.Length; i++)
             {
@@ -152,7 +152,7 @@ namespace Xyz.Vasd.Fake.Database
             return LayersMap.ContainsKey(type);
         }
 
-        internal object GetData(Type type, Entry entry)
+        internal object GetData(Type type, FakeEntry entry)
         {
             if (!LayersMap.ContainsKey(type)) return null;
 
@@ -160,7 +160,7 @@ namespace Xyz.Vasd.Fake.Database
             return layer[entry.Index];
         }
 
-        internal void SetData(Type type, Entry entry, object value)
+        internal void SetData(Type type, FakeEntry entry, object value)
         {
             var layer = LayersMap[type];
             layer[entry.Index] = value;

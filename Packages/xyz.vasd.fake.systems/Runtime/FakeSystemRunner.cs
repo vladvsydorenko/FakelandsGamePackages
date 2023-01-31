@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Xyz.Vasd.Fake.Systems
+/// <summary>
+/// Systems
+/// </summary>
+namespace Xyz.Vasd.Fakelands.Systems
 {
-    public class FakeSystemLoop
+    internal class FakeSystemRunner
     {
         internal List<IFakeSystem> Systems;
 
@@ -11,7 +14,7 @@ namespace Xyz.Vasd.Fake.Systems
         internal List<IFakeSystem> UpdateSystems;
         internal List<IFakeSystem> StopSystems;
 
-        internal FakeSystemLoop()
+        internal FakeSystemRunner()
         {
             Systems = new List<IFakeSystem>();
             StartSystems = new List<IFakeSystem>();
@@ -19,12 +22,23 @@ namespace Xyz.Vasd.Fake.Systems
             StopSystems = new List<IFakeSystem>();
         }
 
+        #region Add/Clear
         internal void AddSystem(IFakeSystem system)
         {
             Systems.Add(system);
             StartSystems.Add(system);
         }
 
+        internal void ClearSystems()
+        {
+            Systems.Clear();
+            StartSystems.Clear();
+            UpdateSystems.Clear();
+            StopSystems.Clear();
+        }
+        #endregion
+
+        #region Start/Stop
         internal void StartAllSystems()
         {
             StartSystems.Clear();
@@ -54,23 +68,16 @@ namespace Xyz.Vasd.Fake.Systems
             StartSystems.Clear();
             UpdateSystems.Clear();
         }
+        #endregion
 
-        internal void ClearSystems()
-        {
-            Systems.Clear();
-            StartSystems.Clear();
-            UpdateSystems.Clear();
-            StopSystems.Clear();
-        }
-
+        #region Loop
         internal void Stage_Start()
         {
             foreach (var system in StartSystems)
             {
                 try
                 {
-                    system.OnSystemAwake();
-                    system.OnSystemStart();
+                    system.SystemStart();
                     UpdateSystems.Add(system);
                 }
                 catch (System.Exception e)
@@ -88,7 +95,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    if (system.IsSystemEnabled) system.OnSystemUpdate();
+                    system.SystemUpdate();
                 }
                 catch (System.Exception e)
                 {
@@ -103,7 +110,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    if (system.IsSystemEnabled) system.OnSystemFixedUpdate();
+                    system.SystemFixedUpdate();
                 }
                 catch (System.Exception e)
                 {
@@ -118,7 +125,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    system.OnSystemStop();
+                    system.SystemStop();
                 }
                 catch (System.Exception e)
                 {
@@ -128,5 +135,6 @@ namespace Xyz.Vasd.Fake.Systems
 
             StopSystems.Clear();
         }
+        #endregion
     }
 }

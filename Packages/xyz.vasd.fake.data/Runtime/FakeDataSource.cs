@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Xyz.Vasd.Fakelands
+
+namespace Xyz.Vasd.Fake.Data
 {
     public class FakeDataSource : MonoBehaviour, IFakeDataSource
     {
