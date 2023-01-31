@@ -682,8 +682,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1801984887}
-  - component: {fileID: 1801984888}
-  - component: {fileID: 1801984889}
   m_Layer: 0
   m_Name: GameWindowManager
   m_TagString: Untagged
@@ -706,30 +704,6 @@ Transform:
   m_Father: {fileID: 2118492990}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1801984888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1801984886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae55071aa78731f44a3fa1fb12441420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1801984889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1801984886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 907c93c9c4268e54c8b50e15b16364c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2118492987
 GameObject:
   m_ObjectHideFlags: 0
