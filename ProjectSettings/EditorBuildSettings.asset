@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Common/Scenes/EmptyScene.unity
+    path: Assets/Fakelands/Common/Scenes/EmptyScene.unity
     guid: e244523d476fb264d8396d6298007f00
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: ac47a4408b2855144bea7f75a366c38a,
