@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Views
 {
     public class FakeViewSwitch : MonoBehaviour
     {

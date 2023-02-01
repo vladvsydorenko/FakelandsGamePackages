@@ -1,4 +1,4 @@
-﻿namespace Xyz.Vasd.Fake
+﻿namespace Xyz.Vasd.Fake.Views
 {
     public enum FakeViewStatus
     {
