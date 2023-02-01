@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Playables;
 
 namespace Xyz.Vasd.Fake.Views
 {
@@ -14,75 +13,37 @@ namespace Xyz.Vasd.Fake.Views
 
         public bool OpenView()
         {
-            if (ViewStatus != FakeViewStatus.Opening) OnOpenView();
-            else OnOpeningView();
+            if (ViewStatus != FakeViewStatus.Opening) OnViewOpen();
+            else OnViewOpenRefresh();
 
             return ViewStatus == FakeViewStatus.Open;
         }
 
-        public virtual void OnOpenView()
+        public virtual void OnViewOpen()
         {
             gameObject.SetActive(true);
             ViewStatus = FakeViewStatus.Open;
         }
 
-        public virtual void OnOpeningView()
+        public virtual void OnViewOpenRefresh()
         {
         }
 
         public bool CloseView()
         {
-            if (ViewStatus != FakeViewStatus.Closing) OnCloseView();
-            else OnClosingView();
+            if (ViewStatus != FakeViewStatus.Closing) OnViewClose();
+            else OnViewCloseRefresh();
 
             return ViewStatus == FakeViewStatus.Open;
         }
 
-        public virtual void OnCloseView()
+        public virtual void OnViewClose()
         {
             gameObject.SetActive(false);
             ViewStatus = FakeViewStatus.Closed;
         }
-        public virtual void OnClosingView()
+        public virtual void OnViewCloseRefresh()
         {
-        }
-    }
-
-    public class FakeAnimatedView : FakeView
-    {
-        public PlayableDirector Director;
-        public PlayableAsset OpenAnimation;
-        public PlayableAsset IdleAnimation;
-        public PlayableAsset CloseAnimation;
-
-        public override void OnOpenView()
-        {
-            PlayAnimation(OpenAnimation);
-            ViewStatus = FakeViewStatus.Opening;
-        }
-        public override void OnOpeningView()
-        {
-            if (Director.time < Director.duration) return;
-            ViewStatus = FakeViewStatus.Open;
-        }
-
-        public override void OnCloseView()
-        {
-            PlayAnimation(CloseAnimation);
-            ViewStatus = FakeViewStatus.Closing;
-        }
-        public override void OnClosingView()
-        {
-            if (Director.time < Director.duration) return;
-            ViewStatus = FakeViewStatus.Closed;
-        }
-
-        private void PlayAnimation(PlayableAsset asset)
-        {
-            Director.playableAsset = asset;
-            Director.time = 0.0;
-            Director.RebuildGraph();
-            Director.Play();
         }
     }
 }
