@@ -28,25 +28,27 @@ namespace Xyz.Vasd.Fake.Systems
 
         private void CollectSystems(Transform root)
         {
-            for (int i = 0; i < root.childCount; i++)
-            {
-                var child = root.GetChild(i).gameObject;
+            GameObjectTools.FindComponentsInTree<IFakeSystem, FakeSystemHost>(root, AddSystem);
 
-                var breakpoint = child.GetComponent<FakeSystemHost>();
-                if (breakpoint != null) continue;
+            // TODO: if line aboive works, delete it
+            //for (int i = 0; i < root.childCount; i++)
+            //{
+            //    var child = root.GetChild(i).gameObject;
 
-                var systems = child.GetComponents<IFakeSystem>();
-                foreach (var system in systems)
-                {
-                    if (system != null)
-                    {
-                        AddSystem(system, child);
-                    }
-                }
+            //    var breakpoint = child.GetComponent<FakeSystemHost>();
+            //    if (breakpoint != null) continue;
 
-                CollectSystems(child.transform);
-            }
+            //    var systems = child.GetComponents<IFakeSystem>();
+            //    foreach (var system in systems)
+            //    {
+            //        if (system != null)
+            //        {
+            //            AddSystem(system, child);
+            //        }
+            //    }
+
+            //    CollectSystems(child.transform);
+            //}
         }
-
     }
 }
