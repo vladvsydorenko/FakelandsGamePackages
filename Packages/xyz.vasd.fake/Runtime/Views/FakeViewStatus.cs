@@ -1,5 +1,8 @@
-﻿namespace Xyz.Vasd.Fake.Views
+﻿using System;
+
+namespace Xyz.Vasd.Fake.Views
 {
+    [Serializable]
     public enum FakeViewStatus
     {
         Closed,

@@ -1,52 +1,48 @@
 ﻿using UnityEngine;
-using UnityEngine.Playables;
 
 namespace Xyz.Vasd.Fake.Views
 {
+
     [AddComponentMenu("Fake/[Fake] Animated View")]
     public class FakeAnimatedView : FakeView
     {
-        public PlayableDirector Director;
-        public PlayableAsset OpenAnimation;
-        public PlayableAsset IdleAnimation;
-        public PlayableAsset CloseAnimation;
+        public Animator Animator;
 
-        #region Open
+        public string CloseTrigger = "trigger:close";
+        public string OpenCallback = "callback:open";
+        public string ClosedCallback = "callback:closed";
+
+        protected virtual void Awake()
+        {
+            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator != null) Animator.StopPlayback();
+        }
+
         public override void OnViewOpen()
         {
-            PlayAnimation(OpenAnimation);
-            ViewStatus = FakeViewStatus.Opening;
+            gameObject.SetActive(true);
+            Animator.Play(0);
         }
 
         public override void OnViewOpenRefresh()
         {
-            if (Director.time < Director.duration) return;
+            if (!Animator.GetBool(OpenCallback)) return;
+
             ViewStatus = FakeViewStatus.Open;
-
-            if (Director.playableAsset != IdleAnimation) PlayAnimation(IdleAnimation);
         }
-        #endregion
 
-        #region Close
         public override void OnViewClose()
         {
-            PlayAnimation(CloseAnimation);
-            ViewStatus = FakeViewStatus.Closing;
+            base.OnViewClose();
+            Animator.SetBool(CloseTrigger, true);
         }
 
         public override void OnViewCloseRefresh()
         {
-            if (Director.time < Director.duration) return;
-            ViewStatus = FakeViewStatus.Closed;
-        }
-        #endregion
+            if (!Animator.GetBool(ClosedCallback)) return;
 
-        private void PlayAnimation(PlayableAsset asset)
-        {
-            Director.playableAsset = asset;
-            Director.time = 0.0;
-            Director.RebuildGraph();
-            Director.Play();
+            ViewStatus = FakeViewStatus.Closed;
+            gameObject.SetActive(false);
         }
     }
 }

@@ -132,15 +132,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 321932221}
+  - component: {fileID: 321932224}
   - component: {fileID: 321932222}
-  - component: {fileID: 321932223}
+  - component: {fileID: 321932225}
   m_Layer: 0
-  m_Name: View 2
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &321932221
 Transform:
   m_ObjectHideFlags: 0
@@ -170,7 +171,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Location: /loader
---- !u!114 &321932223
+--- !u!95 &321932224
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321932220}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6391a3b14fb780743bd1a1b06ce6777b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &321932225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,9 +200,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 321932220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc3b0e5e30cc2145a83d9d058c827cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 51438014f07137d419b6ac93f32d8840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewStatus: 0
+  Animator: {fileID: 0}
+  CloseTrigger: trigger:close
+  OpenCallback: callback:open
+  ClosedCallback: callback:closed
 --- !u!1 &501824834
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,15 +557,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1189995948}
+  - component: {fileID: 1189995951}
   - component: {fileID: 1189995949}
   - component: {fileID: 1189995950}
   m_Layer: 0
-  m_Name: View 1
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1189995948
 Transform:
   m_ObjectHideFlags: 0
@@ -578,9 +605,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1189995947}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc3b0e5e30cc2145a83d9d058c827cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 51438014f07137d419b6ac93f32d8840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ViewStatus: 0
+  Animator: {fileID: 0}
+  CloseTrigger: trigger:close
+  OpenCallback: callback:open
+  ClosedCallback: callback:closed
+--- !u!95 &1189995951
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189995947}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6391a3b14fb780743bd1a1b06ce6777b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1345080883
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +646,7 @@ GameObject:
   - component: {fileID: 1345080886}
   - component: {fileID: 1345080885}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -608,7 +660,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345080883}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.89, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,7 +951,7 @@ GameObject:
   - component: {fileID: 1368403395}
   - component: {fileID: 1368403396}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Router
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -948,7 +1000,7 @@ GameObject:
   - component: {fileID: 1526368699}
   - component: {fileID: 1526368698}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,6 +5,7 @@ namespace Xyz.Vasd.Fake.Views
     [AddComponentMenu("Fake/[Fake] View")]
     public class FakeView : MonoBehaviour, IFakeView
     {
+        [SerializeField]
         protected FakeViewStatus ViewStatus;
     
         public FakeViewStatus GetViewStatus()
@@ -15,8 +16,24 @@ namespace Xyz.Vasd.Fake.Views
         #region Open
         public bool OpenView()
         {
-            if (ViewStatus != FakeViewStatus.Opening) OnViewOpen();
-            else OnViewOpenRefresh();
+            // already open
+            if (ViewStatus == FakeViewStatus.Open) return true;
+
+            // first open
+            if (ViewStatus != FakeViewStatus.Opening)
+            {
+                ViewStatus = FakeViewStatus.Opening;
+                OnViewOpen();
+            }
+
+            // view was open immediately, no need to call refresh
+            if (ViewStatus == FakeViewStatus.Open) return true;
+
+            // refresh
+            if (ViewStatus == FakeViewStatus.Opening)
+            {
+                OnViewOpenRefresh();
+            }
 
             return ViewStatus == FakeViewStatus.Open;
         }
@@ -24,31 +41,46 @@ namespace Xyz.Vasd.Fake.Views
         public virtual void OnViewOpen()
         {
             gameObject.SetActive(true);
-            ViewStatus = FakeViewStatus.Open;
         }
 
         public virtual void OnViewOpenRefresh()
         {
+            ViewStatus = FakeViewStatus.Open;
         }
         #endregion
 
         #region Close
         public bool CloseView()
         {
-            if (ViewStatus != FakeViewStatus.Closing) OnViewClose();
-            else OnViewCloseRefresh();
+            // already closed
+            if (ViewStatus == FakeViewStatus.Closed) return true;
 
-            return ViewStatus == FakeViewStatus.Open;
+            if (ViewStatus != FakeViewStatus.Closing)
+            {
+                // mark status
+                ViewStatus = FakeViewStatus.Closing;
+                OnViewClose();
+            }
+
+            // view was closed immediately, no need to call refresh
+            if (ViewStatus == FakeViewStatus.Closed) return true;
+
+            if (ViewStatus == FakeViewStatus.Closing)
+            {
+                OnViewCloseRefresh();
+            }
+
+            return ViewStatus == FakeViewStatus.Closed;
         }
 
         public virtual void OnViewClose()
         {
-            gameObject.SetActive(false);
-            ViewStatus = FakeViewStatus.Closed;
         }
-        
+
         public virtual void OnViewCloseRefresh()
         {
+            gameObject.SetActive(false);
+            ViewStatus = FakeViewStatus.Closed;
         }
         #endregion
     }
