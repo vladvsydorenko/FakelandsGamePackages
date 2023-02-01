@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Views
 {
+    [AddComponentMenu("Fake/[Fake] View")]
     public class FakeView : MonoBehaviour, IFakeView
     {
         protected FakeViewStatus ViewStatus;
@@ -11,6 +12,7 @@ namespace Xyz.Vasd.Fake.Views
             return ViewStatus;
         }
 
+        #region Open
         public bool OpenView()
         {
             if (ViewStatus != FakeViewStatus.Opening) OnViewOpen();
@@ -28,7 +30,9 @@ namespace Xyz.Vasd.Fake.Views
         public virtual void OnViewOpenRefresh()
         {
         }
+        #endregion
 
+        #region Close
         public bool CloseView()
         {
             if (ViewStatus != FakeViewStatus.Closing) OnViewClose();
@@ -42,8 +46,10 @@ namespace Xyz.Vasd.Fake.Views
             gameObject.SetActive(false);
             ViewStatus = FakeViewStatus.Closed;
         }
+        
         public virtual void OnViewCloseRefresh()
         {
         }
+        #endregion
     }
 }

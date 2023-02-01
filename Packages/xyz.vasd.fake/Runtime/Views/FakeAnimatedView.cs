@@ -1,7 +1,9 @@
-﻿using UnityEngine.Playables;
+﻿using UnityEngine;
+using UnityEngine.Playables;
 
 namespace Xyz.Vasd.Fake.Views
 {
+    [AddComponentMenu("Fake/[Fake] Animated View")]
     public class FakeAnimatedView : FakeView
     {
         public PlayableDirector Director;
@@ -9,6 +11,7 @@ namespace Xyz.Vasd.Fake.Views
         public PlayableAsset IdleAnimation;
         public PlayableAsset CloseAnimation;
 
+        #region Open
         public override void OnViewOpen()
         {
             PlayAnimation(OpenAnimation);
@@ -22,7 +25,9 @@ namespace Xyz.Vasd.Fake.Views
 
             if (Director.playableAsset != IdleAnimation) PlayAnimation(IdleAnimation);
         }
+        #endregion
 
+        #region Close
         public override void OnViewClose()
         {
             PlayAnimation(CloseAnimation);
@@ -34,6 +39,7 @@ namespace Xyz.Vasd.Fake.Views
             if (Director.time < Director.duration) return;
             ViewStatus = FakeViewStatus.Closed;
         }
+        #endregion
 
         private void PlayAnimation(PlayableAsset asset)
         {
