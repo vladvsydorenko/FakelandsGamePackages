@@ -33,18 +33,17 @@ namespace Xyz.Vasd.Fake.Views
 
         public void RefreshRouter()
         {
-            if (Location != _activeLocation)
+            if (Location == _activeLocation || !_routes.ContainsKey(Location)) return;
+
+            IFakeView current = null;
+
+            if (_routes.ContainsKey(Location))
             {
-                IFakeView current = null;
-
-                if (_routes.ContainsKey(Location))
-                {
-                    current = _routes[Location];
-                }
-
-                _currentView = current;
-                _activeLocation = Location;
+                current = _routes[Location];
             }
+
+            _currentView = current;
+            _activeLocation = Location;
         }
 
         public void UpdateRouter()
