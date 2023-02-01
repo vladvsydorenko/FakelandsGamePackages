@@ -11,6 +11,9 @@ namespace Xyz.Vasd.Fake.Systems
         internal List<IFakeSystem> UpdateSystems;
         internal List<IFakeSystem> StopSystems;
 
+        private List<IFakeSystem> _temp;
+        private List<IFakeSystem> _startedSystems;
+
         public FakeSystemRunner()
         {
             Systems = new List<IFakeSystem>();
@@ -70,12 +73,19 @@ namespace Xyz.Vasd.Fake.Systems
         #region Loop
         public void Stage_Start()
         {
+            _temp.Clear();
+
             foreach (var system in StartSystems)
             {
                 try
                 {
-                    system.SystemStart();
-                    UpdateSystems.Add(system);
+                    if (system.IsSystemActive())
+                    {
+                        system.SystemStart();
+                        UpdateSystems.Add(system);
+                        _temp.Add(system);
+                        _startedSystems.Add(system);
+                    }
                 }
                 catch (System.Exception e)
                 {
@@ -83,7 +93,7 @@ namespace Xyz.Vasd.Fake.Systems
                 }
             }
 
-            StartSystems.Clear();
+            RemoveFromList(_temp, StartSystems);
         }
 
         public void Stage_Update()
@@ -92,7 +102,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    system.SystemUpdate();
+                    if (system.IsSystemActive()) system.SystemUpdate();
                 }
                 catch (System.Exception e)
                 {
@@ -107,7 +117,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    system.SystemFixedUpdate();
+                    if (system.IsSystemActive()) system.SystemFixedUpdate();
                 }
                 catch (System.Exception e)
                 {
@@ -122,7 +132,7 @@ namespace Xyz.Vasd.Fake.Systems
             {
                 try
                 {
-                    system.SystemStop();
+                    if (_startedSystems.Contains(system)) system.SystemStop();
                 }
                 catch (System.Exception e)
                 {
@@ -131,6 +141,16 @@ namespace Xyz.Vasd.Fake.Systems
             }
 
             StopSystems.Clear();
+        }
+        #endregion
+
+        #region
+        private void RemoveFromList(List<IFakeSystem> valuesToRemove, List<IFakeSystem> list)
+        {
+            foreach (var system in valuesToRemove)
+            {
+                list.Remove(system);
+            }
         }
         #endregion
     }

@@ -2,6 +2,7 @@
 {
     public interface IFakeSystem
     {
+        bool IsSystemActive();
         void SystemStart();
         void SystemUpdate();
         void SystemFixedUpdate();
