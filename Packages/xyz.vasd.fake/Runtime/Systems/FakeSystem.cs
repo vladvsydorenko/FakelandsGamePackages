@@ -11,6 +11,11 @@ namespace Xyz.Vasd.Fake.Systems
             FakeDataInjector.InjectData(this);
         }
 
+        bool IFakeSystem.IsSystemActive()
+        {
+            return isActiveAndEnabled;
+        }
+
         void IFakeSystem.SystemStart()
         {
         }
