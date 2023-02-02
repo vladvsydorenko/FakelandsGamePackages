@@ -4,7 +4,7 @@ namespace Xyz.Vasd.Fake.Views
 {
     public class CallbackMachine : StateMachineBehaviour
     {
-        public string ExitCallback = "callback_open";
+        public string ExitCallback = "callback:open";
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
