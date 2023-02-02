@@ -13,6 +13,7 @@ namespace Xyz.Vasd.Fakelands
         public float Progress;
 
         [Header("Elements")]
+        public TMP_FontAsset Font;
         public TextMeshProUGUI TextElement;
 
         [Header("Editor")]
@@ -20,7 +21,12 @@ namespace Xyz.Vasd.Fakelands
 
         protected virtual void Awake()
         {
-            if (TextElement == null) TextElement = GetComponent<TextMeshProUGUI>();
+            Refresh();
+        }
+
+        private void OnValidate()
+        {
+            Refresh();
         }
 
         protected virtual void Update()
@@ -37,6 +43,12 @@ namespace Xyz.Vasd.Fakelands
             if (chars > 0) text = Text[..chars];
 
             TextElement.text = text;
+        }
+
+        private void Refresh()
+        {
+            if (TextElement == null) TextElement = GetComponentInChildren<TextMeshProUGUI>();
+            if (Text != null) TextElement.font = Font;
         }
     }
 }
