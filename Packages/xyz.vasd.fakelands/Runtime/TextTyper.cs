@@ -13,6 +13,7 @@ namespace Xyz.Vasd.Fakelands
         public float Progress;
 
         [Header("Elements")]
+        public Color Color = Color.black;
         public TMP_FontAsset Font;
         public TextMeshProUGUI TextElement;
 
@@ -48,7 +49,11 @@ namespace Xyz.Vasd.Fakelands
         private void Refresh()
         {
             if (TextElement == null) TextElement = GetComponentInChildren<TextMeshProUGUI>();
-            if (Text != null) TextElement.font = Font;
+            if (Text != null)
+            {
+                TextElement.color = Color;
+                TextElement.font = Font;
+            }
         }
     }
 }
