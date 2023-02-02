@@ -4,5 +4,10 @@
   "unity": "2021.3",
   "description": "Core framework in fake 'ecosystem'",
   "version": "0.0.1-alpha.1",
-  "hideInEditor": false
+  "hideInEditor": false,
+  "dependencies": {
+    "xyz.vasd.fake.data": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.data#dev",
+    "xyz.vasd.fake.views": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.views#dev",
+    "xyz.vasd.fake.systems": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.systems#dev"
+  }
 }

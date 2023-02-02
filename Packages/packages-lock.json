@@ -280,7 +280,11 @@
       "version": "file:xyz.vasd.fake",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "xyz.vasd.fake.data": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.data#dev",
+        "xyz.vasd.fake.views": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.views#dev",
+        "xyz.vasd.fake.systems": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.systems#dev"
+      }
     },
     "xyz.vasd.fake.data": {
       "version": "file:xyz.vasd.fake.data",

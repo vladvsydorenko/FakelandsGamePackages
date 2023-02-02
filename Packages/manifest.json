@@ -45,6 +45,10 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "xyz.vasd.fake.data": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.data#dev",
+    "xyz.vasd.fake.views": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.views#dev",
+    "xyz.vasd.fake.systems": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fake.systems#dev",
+    "xyz.vasd.fakelands.fonts": "https://github.com/vladvsydorenko/FakelandsGamePackages.git?path=Packages/xyz.vasd.fakelands.fonts#dev"
   }
 }

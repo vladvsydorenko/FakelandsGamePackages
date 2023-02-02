@@ -19,7 +19,9 @@ namespace Xyz.Vasd.Fake.Views
             var routes = GetComponentsInChildren<FakeRoute>(includeInactive: true);
             foreach (var route in routes)
             {
-                var view = route.gameObject.GetComponent<IFakeView>();
+                var view = route.View;
+                if (view == null) continue;
+
                 _routes[route.Location] = view;
                 _views.Add(view);
             }
