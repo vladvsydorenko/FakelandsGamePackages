@@ -29,7 +29,7 @@ namespace Xyz.Vasd.Fake.Systems
         }
     }
 
-    [AddComponentMenu("Fake/[Fake] System Host")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] System Host")]
     public class FakeSystemHost : MonoBehaviour
     {
         public bool AutoStart;

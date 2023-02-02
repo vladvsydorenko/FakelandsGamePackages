@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Views
 {
-    [AddComponentMenu("Fake/[Fake] Router")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] Router")]
     public class FakeRouter : MonoBehaviour
     {
         public string Location;

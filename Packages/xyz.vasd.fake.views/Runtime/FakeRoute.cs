@@ -3,7 +3,7 @@
 namespace Xyz.Vasd.Fake.Views
 {
     [ExecuteInEditMode]
-    [AddComponentMenu("Fake/[Fake] Route")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] Route")]
     public class FakeRoute : MonoBehaviour
     {
         [Header("Route")]

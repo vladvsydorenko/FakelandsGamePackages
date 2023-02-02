@@ -2,7 +2,7 @@
 
 namespace Xyz.Vasd.Fake.Views
 {
-    [AddComponentMenu("Fake/[Fake] Canvas")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] Canvas")]
     [ExecuteInEditMode]
     public class FakeCanvas : MonoBehaviour
     {

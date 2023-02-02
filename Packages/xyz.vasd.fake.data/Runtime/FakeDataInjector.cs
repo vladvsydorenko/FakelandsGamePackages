@@ -9,6 +9,7 @@ namespace Xyz.Vasd.Fake.Data
     /// <summary>
     /// Injects data into fields of marked components
     /// </summary>
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] Data Injector")]
     public class FakeDataInjector : MonoBehaviour
     {
         public bool InjectOnAwake;

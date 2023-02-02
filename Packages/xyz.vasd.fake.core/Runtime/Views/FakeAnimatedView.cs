@@ -3,7 +3,7 @@
 namespace Xyz.Vasd.Fake.Views
 {
 
-    [AddComponentMenu("Fake/[Fake] Animated View")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] Animated View")]
     public class FakeAnimatedView : FakeView
     {
         public Animator Animator;

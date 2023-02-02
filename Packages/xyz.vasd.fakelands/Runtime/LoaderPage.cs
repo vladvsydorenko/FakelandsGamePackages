@@ -4,7 +4,7 @@ using Xyz.Vasd.Fake.Views;
 
 namespace Xyz.Vasd.Fakelands
 {
-    [AddComponentMenu("Fakelands/[Fakelands] Preloader Page")]
+    [AddComponentMenu("Fakelands/[Deprecated]/[Fakelands] Preloader Page")]
     public class LoaderPage : FakeAnimatedView
     {
         [Header("Refs")]

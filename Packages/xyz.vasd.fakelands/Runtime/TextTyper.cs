@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Xyz.Vasd.Fakelands
 {
     [ExecuteInEditMode]
-    [AddComponentMenu("Fakelands/[Fakelands] Text Typer")]
+    [AddComponentMenu("Fakelands/[Deprecated]/[Fakelands] Text Typer")]
     public class TextTyper : MonoBehaviour
     {
         [Header("Text")]

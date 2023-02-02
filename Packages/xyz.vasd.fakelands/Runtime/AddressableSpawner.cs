@@ -4,7 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Xyz.Vasd.Fakelands
 {
-    [AddComponentMenu("Fakelands/[Fakelands] Addressable Spawner")]
+    [AddComponentMenu("Fakelands/[Deprecated]/[Fakelands] Addressable Spawner")]
     public class AddressableSpawner : MonoBehaviour
     {
         public AssetReferenceGameObject Prefab;

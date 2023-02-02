@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Views
 {
-    [AddComponentMenu("Fake/[Fake] View")]
+    [AddComponentMenu("Fake/[Deprecated]/[Fake] View")]
     public class FakeView : MonoBehaviour, IFakeView
     {
         [SerializeField]

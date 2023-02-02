@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Xyz.Vasd.Fakelands
 {
-    [AddComponentMenu("Fakelands/[Fakelands] Addressable Loader")]
+    [AddComponentMenu("Fakelands/[Deprecated]/[Fakelands] Addressable Loader")]
     public class AddressableLoader : MonoBehaviour
     {
         private enum LoadStatus
