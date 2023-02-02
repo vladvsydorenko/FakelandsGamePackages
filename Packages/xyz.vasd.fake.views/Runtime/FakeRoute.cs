@@ -39,7 +39,7 @@ namespace Xyz.Vasd.Fake.Views
             if (!ExecuteInEditor && !Application.isPlaying) return;
 
             if (Root == null) Root = gameObject;
-            if (View == null) View = Root.GetComponentInChildren<IFakeView>();
+            View = Root.GetComponentInChildren<IFakeView>(includeInactive: true);
             if (UseObjectName) Location = gameObject.name;
         }
     }
