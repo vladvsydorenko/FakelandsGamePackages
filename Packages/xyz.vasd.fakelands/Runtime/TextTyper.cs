@@ -43,6 +43,7 @@ namespace Xyz.Vasd.Fakelands
 
             if (chars > 0) text = Text[..chars];
 
+            TextElement.color = Color;
             TextElement.text = text;
         }
 
