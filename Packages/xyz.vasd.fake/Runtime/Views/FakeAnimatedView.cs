@@ -18,6 +18,12 @@ namespace Xyz.Vasd.Fake.Views
             if (Animator != null) Animator.StopPlayback();
         }
 
+        protected virtual void OnValidate()
+        {
+            if (Animator == null) Animator = GetComponent<Animator>();
+            if (Animator != null) Animator.StopPlayback();
+        }
+
         public override void OnViewOpen()
         {
             gameObject.SetActive(true);
