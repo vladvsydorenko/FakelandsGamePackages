@@ -37,7 +37,6 @@ namespace Xyz.Vasd.Fake.Views
 
         public void RefreshRouter()
         {
-            Debug.Log($"Location: {Location} {_routes.ContainsKey(Location)}");
             if (Location == _activeLocation || !_routes.ContainsKey(Location)) return;
 
             IFakeView current = null;
