@@ -18,6 +18,11 @@ namespace Xyz.Vasd.Fakelands
         [Header("Editor")]
         public bool ExecuteInEditor;
 
+        protected virtual void Awake()
+        {
+            if (TextElement == null) TextElement = GetComponent<TextMeshProUGUI>();
+        }
+
         protected virtual void Update()
         {
             #if UNITY_EDITOR
