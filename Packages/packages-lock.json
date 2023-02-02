@@ -294,8 +294,20 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "xyz.vasd.fake.views": {
+      "version": "file:xyz.vasd.fake.views",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "xyz.vasd.fakelands": {
       "version": "file:xyz.vasd.fakelands",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "xyz.vasd.fakelands.fonts": {
+      "version": "file:xyz.vasd.fakelands.fonts",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
