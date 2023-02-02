@@ -8,7 +8,4 @@ namespace Xyz.Vasd.Fakelands
 
 namespace Xyz.Vasd.Fakelands
 {
-    public class GameWindowSystem : FakeSystem
-    {
-    }
 }

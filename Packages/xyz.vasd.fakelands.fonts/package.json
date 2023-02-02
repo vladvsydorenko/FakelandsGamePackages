@@ -1,0 +1,8 @@
+{
+  "name": "xyz.vasd.fakelands.fonts",
+  "displayName": "Fakelands.Fonts",
+  "unity": "2021.3",
+  "description": "Fonts for Fakelands game",
+  "version": "0.0.1-alpha.1",
+  "hideInEditor": false
+}

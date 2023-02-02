@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Xyz.Vasd.Fake.Data
 {
+    [AddComponentMenu("Fake/[Fake] Data Source")]
     public class FakeDataSource : MonoBehaviour, IFakeDataSource
     {
         protected Dictionary<Type, object> SourceDatas = new();

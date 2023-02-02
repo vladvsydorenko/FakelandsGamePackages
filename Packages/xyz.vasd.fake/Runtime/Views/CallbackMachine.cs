@@ -15,6 +15,5 @@ namespace Xyz.Vasd.Fake.Views
         {
             animator.SetBool(ExitCallback, true);
         }
-
     }
 }
