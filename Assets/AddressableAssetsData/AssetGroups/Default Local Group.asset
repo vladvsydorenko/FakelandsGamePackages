@@ -15,15 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: eb204e125a67ed1479363ec5deb38b16
-  m_SerializeEntries:
-  - m_GUID: f51ac51d2f903984ea38443778968be0
-    m_Address: Assets/Fake Core/Preloader/MainMenuPrefab.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_GUID: 76a65c399074bc344b62eb538e13b85a
+  m_SerializeEntries: []
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: 29b6f887a418a554cbf45804038a1026, type: 2}
+  m_Settings: {fileID: 11400000, guid: 5d626631aefcef940b08b90ea8e61040, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 568e37f3dbb20d04588ab024def400ef, type: 2}
-    - {fileID: 11400000, guid: fc06979d8eed56b4f8e3cf3b9170d100, type: 2}
+    - {fileID: 11400000, guid: f7ec4c2174013274abdb035eb8218ec3, type: 2}
+    - {fileID: 11400000, guid: 48af9e22033f9f24b9df7a18647a8605, type: 2}

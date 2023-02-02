@@ -276,38 +276,38 @@
       },
       "url": "https://packages.unity.com"
     },
-    "xyz.vasd.fake-camera": {
-      "version": "file:xyz.vasd.fake-camera",
+    "xyz.vasd.fake": {
+      "version": "file:xyz.vasd.fake",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake-core": {
-      "version": "file:xyz.vasd.fake-core",
+    "xyz.vasd.fake.data": {
+      "version": "file:xyz.vasd.fake.data",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake-data": {
-      "version": "file:xyz.vasd.fake-data",
+    "xyz.vasd.fake.systems": {
+      "version": "file:xyz.vasd.fake.systems",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake-fonts": {
-      "version": "file:xyz.vasd.fake-fonts",
+    "xyz.vasd.fake.views": {
+      "version": "file:xyz.vasd.fake.views",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake-pass": {
-      "version": "file:xyz.vasd.fake-pass",
+    "xyz.vasd.fakelands": {
+      "version": "file:xyz.vasd.fakelands",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "xyz.vasd.fake-systems": {
-      "version": "file:xyz.vasd.fake-systems",
+    "xyz.vasd.fakelands.fonts": {
+      "version": "file:xyz.vasd.fakelands.fonts",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

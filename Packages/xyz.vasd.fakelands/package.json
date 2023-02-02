@@ -1,0 +1,8 @@
+{
+  "name": "xyz.vasd.fakelands",
+  "displayName": "Fakelands",
+  "unity": "2021.3",
+  "description": "Fakelands top layer package",
+  "version": "0.0.1-alpha.1",
+  "hideInEditor": false
+}

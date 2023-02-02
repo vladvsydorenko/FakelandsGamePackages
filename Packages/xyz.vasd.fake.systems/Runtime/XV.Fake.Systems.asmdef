@@ -1,0 +1,14 @@
+{
+    "name": "XV.Fake.Systems",
+    "rootNamespace": "Xyz.Vasd.Fake.Systems",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
