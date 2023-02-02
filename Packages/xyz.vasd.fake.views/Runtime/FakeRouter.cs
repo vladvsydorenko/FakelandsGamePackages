@@ -24,6 +24,8 @@ namespace Xyz.Vasd.Fake.Views
 
                 _routes[route.Location] = view;
                 _views.Add(view);
+                var viewGo = view.GetViewGameObject();
+                if (viewGo != null) viewGo.SetActive(false);
             }
         }
 

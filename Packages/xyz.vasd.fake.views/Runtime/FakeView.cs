@@ -13,6 +13,11 @@ namespace Xyz.Vasd.Fake.Views
             return ViewStatus;
         }
 
+        public GameObject GetViewGameObject()
+        {
+            return gameObject;
+        }
+
         #region Open
         public bool OpenView()
         {
