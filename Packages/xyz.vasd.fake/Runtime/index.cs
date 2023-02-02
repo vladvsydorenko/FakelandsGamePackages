@@ -16,6 +16,11 @@ namespace Xyz.Vasd.Fake
         void SetParent(IElement parent);
     }
 
+    public interface ITree<T> where T : IElement
+    {
+        void SetRoot(T root);
+    }
+
     public class Element : IElement
     {
         protected IElement Parent;
@@ -71,4 +76,13 @@ namespace Xyz.Vasd.Fake
         }
     }
 
+    public class Tree<T> where T : IElement
+    {
+        public T Root { get; private set; }
+
+        public void SetRoot(T root)
+        {
+            Root = root;
+        }
+    }
 }
