@@ -19,7 +19,9 @@ namespace Xyz.Vasd.Fakelands
         public AssetLabelReference[] Labels;
         public AssetReference[] References;
 
-        private LoadStatus _status;
+        private LoadStatus _status = LoadStatus.Unloaded;
+        private bool _isAddressablesLoaded = false;
+
         private List<AsyncOperationHandle> _handles = new();
 
         public bool LoadAddressables()
@@ -67,7 +69,15 @@ namespace Xyz.Vasd.Fakelands
 
         private bool IsLoaded()
         {
-            return _handles.All(handle => handle.IsDone);
+            if (_isAddressablesLoaded) return true;
+
+            _isAddressablesLoaded = _handles.All(h => h.IsDone);
+            
+            if (_isAddressablesLoaded) 
+                _handles
+                    .ForEach(h => Addressables.Release(h));
+
+            return _isAddressablesLoaded;
         }
     }
 }

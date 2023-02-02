@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Xyz.Vasd.Fake.Views;
 
 namespace Xyz.Vasd.Fakelands
@@ -25,6 +26,11 @@ namespace Xyz.Vasd.Fakelands
             if (Loader != null) Loader.LoadAddressables();
         }
 
+        protected override void OnValidate()
+        {
+            Refresh();
+        }
+
         protected virtual void Update()
         {
             if (Loader != null && !Loader.LoadAddressables()) return;
@@ -35,11 +41,6 @@ namespace Xyz.Vasd.Fakelands
             {
                 Router.Location = Redirect;
             }
-        }
-
-        protected override void OnValidate()
-        {
-            Refresh();
         }
 
         private void Refresh()
