@@ -27,18 +27,20 @@ namespace Xyz.Vasd.Fake
         void RemoveChild(INode child);
 
         bool Contains(Type type);
+        object GetContent(Type type);
     }
 
     public class Node : INode
     {
         public readonly int Id;
 
-        protected readonly List<Type> Types;
+        private List<Type> _types = new();
+        private Dictionary<Type, object> _content = new(); 
 
-        private List<INode> _children;
+        private List<INode> _children = new();
         private int _childrenVersion;
 
-        private INode[] _childrenArray;
+        private INode[] _childrenArray = new INode[0];
         private int _childrenArrayVersion;
 
         public Node(int id)
@@ -90,7 +92,13 @@ namespace Xyz.Vasd.Fake
         #region Content
         bool INode.Contains(Type type)
         {
-            return Types.Contains(type);
+            return _types.Contains(type);
+        }
+
+        object INode.GetContent(Type type)
+        {
+            if (_content.ContainsKey(type)) return _content[type];
+            return null;
         }
         #endregion
     }
