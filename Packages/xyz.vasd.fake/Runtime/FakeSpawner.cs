@@ -5,45 +5,6 @@ using UnityEngine.AddressableAssets;
 
 namespace Xyz.Vasd.Fake
 {
-    public class Asset
-    {
-        public AssetReference Reference;
-    }    
-
-    public class AssetsMan
-    {
-        private struct AssetData
-        {
-            public AssetReference Reference;
-            public List<Asset> Assets;
-        }
-
-        private Dictionary<AssetReference, AssetData> _assets;
-
-        public Asset CreateAsset(AssetReference reference)
-        {
-            if (!_assets.ContainsKey(reference))
-            {
-                _assets[reference] = new AssetData()
-                {
-                    Reference = reference,
-                    Assets = new List<Asset>(),
-                };
-            }
-
-            var data = _assets[reference];
-            var asset = new Asset();
-            data.Assets.Add(asset);
-            return null;
-        }
-
-        public void ReleaseAsset(Asset asset)
-        {
-            if (!_assets.ContainsKey(asset.Reference) || !asset.Reference.IsDone) return;
-            Addressables.Release(asset.Reference);
-        }
-    }
-
     [AddComponentMenu("Fake/[Fake] Spawner")]
     public class FakeSpawner : MonoBehaviour
     {
