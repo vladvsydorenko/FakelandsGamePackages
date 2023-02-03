@@ -42,17 +42,41 @@ namespace Xyz.Vasd.Fake
         private Dictionary<GameObject, Node> _nodesMap;
     }
 
-    public static class NodeTools
+    public class WeakRegistry<TKey, TValue>
+        where TKey : class
+        where TValue : class
     {
-        private static ConditionalWeakTable<GameObject, Node> _nodes;
+        private ConditionalWeakTable<TKey, TValue> _values = new();
 
-        public static Node GetNode(GameObject go)
+        public TValue Get(TKey key)
         {
-            _nodes.TryGetValue(go, out Node node);
-            return node;
+            _values.TryGetValue(key, out var value);
+            return value;
+        }
+
+        public void Add(TKey key, TValue value)
+        {
+            _values.AddOrUpdate(key, value);
         }
     }
 
+    public class NodeRegistry : WeakRegistry<GameObject, Node>
+    {
+        public static NodeRegistry GlobalRegistry
+        {
+            get
+            {
+                if (_instance == null) _instance = new NodeRegistry();
+                return _instance;
+            }
+            private set => _instance = value;
+        }
+        private static NodeRegistry _instance;
+    }
+}
+
+namespace Xyz.Vasd.Fake
+{
     public class Route : MonoBehaviour
     {
         public string Path { get; private set; }
