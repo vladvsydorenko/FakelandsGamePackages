@@ -1,21 +1,25 @@
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 //namespace Xyz.Vasd.Fake { public class index {} }
 
 namespace Xyz.Vasd.Fake
 {
-    public class FakeAssetReference
+    public enum FakeActionStage
     {
-        public readonly AssetReference Reference;
-
-        public FakeAssetReference(AssetReference reference)
-        {
-            Reference = reference;
-        }
+        None,
+        Start,
+        Work,
+        Done,
     }
 
-    public static class FakeAddressables
+    public class FakeAsset
     {
+        public FakeActionStage LoadingStage { get; private set; }
 
+        public bool Load()
+        {
+            return LoadingStage == FakeActionStage.Done;
+        }
     }
 }
