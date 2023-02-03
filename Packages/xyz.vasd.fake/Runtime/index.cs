@@ -17,6 +17,7 @@ namespace Xyz.Vasd.Fake
 {
     public interface INode
     {
+        int GetId();
         void SetParent(INode node);
         void AddChild(INode child);
         void RemoveChild(INode child);
@@ -24,6 +25,13 @@ namespace Xyz.Vasd.Fake
 
     public class Node : INode
     {
+        public readonly int Id;
+
+        public Node(int id)
+        {
+            Id = id;
+        }
+
         void INode.SetParent(INode node)
         {
         }
@@ -35,11 +43,27 @@ namespace Xyz.Vasd.Fake
         void INode.RemoveChild(INode child)
         {
         }
+
+        int INode.GetId()
+        {
+            return Id;
+        }
     }
 
-    public class Tree
+    public class NodeRegistry<T> where T : class, INode
     {
-        private Dictionary<GameObject, Node> _nodesMap;
+        private HashSet<int> _prints = new();
+        private ConditionalWeakTable<GameObject, T> _nodes = new();
+
+        public bool Contains(GameObject go)
+        {
+            return Contains(go.GetInstanceID());
+        }
+
+        public bool Contains(int id)
+        {
+            return _prints.Contains(id);
+        }
     }
 
     public class WeakRegistry<TKey, TValue>
@@ -47,6 +71,7 @@ namespace Xyz.Vasd.Fake
         where TValue : class
     {
         private ConditionalWeakTable<TKey, TValue> _values = new();
+        private HashSet<int> _prints = new();
 
         public TValue Get(TKey key)
         {
@@ -54,14 +79,53 @@ namespace Xyz.Vasd.Fake
             return value;
         }
 
-        public void Add(TKey key, TValue value)
+        public bool Contains(int print)
+        {
+            return _prints.Contains(print);
+        }
+
+        public virtual bool Contains(TKey key)
+        {
+            _values.TryGetValue(key, out var value);
+            return value != null;
+        }
+
+        public virtual void Set(TKey key, TValue value, int print)
         {
             _values.AddOrUpdate(key, value);
+            _prints.Add(print);
+        }
+
+        public void SetIfEmpty(TKey key, TValue value, int print)
+        {
+            if (!Contains(key)) Set(key, value, print);
         }
     }
 
-    public class NodeRegistry : WeakRegistry<GameObject, Node>
+    public class NodeRegistry2 : WeakRegistry<GameObject, Node>
     {
+        public void Scan(GameObject root, bool includeRoot = false)
+        {
+            for (int i = 0; i < root.transform.childCount; i++)
+            {
+                var child = root.transform.GetChild(i);
+                SetIfEmpty(child.gameObject, new Node());
+            }
+        }
+
+        public override bool Contains(GameObject key)
+        {
+            return Contains(key.GetInstanceID());
+        }
+
+        public void Set(GameObject key, Node value)
+        {
+            Set(key, value, key.GetInstanceID());
+        }
+        public void SetIfEmpty(GameObject key, Node value)
+        {
+            if (!Contains(key)) Set(key, value);
+        }
         public static NodeRegistry GlobalRegistry
         {
             get
@@ -81,35 +145,9 @@ namespace Xyz.Vasd.Fake
     {
         public string Path { get; private set; }
     
-        public Route ParentRoute { get; private set; }
-        public List<Route> ChildRoutes { get; private set; }
-
         private void Awake()
         {
-            var parentRoute = transform.parent.GetComponentInParent<Route>();
 
-            if (parentRoute == null)
-            {
-                // CASE: no parent route
-                return;
-            }
-
-            parentRoute.AddChildRoute(this);
-        }
-
-        public void SetParentRoute(Route parent)
-        {
-            ParentRoute = parent;
-        }
-
-        public void AddChildRoute(Route route)
-        {
-            ChildRoutes?.Add(route);
-        }
-
-        public void RemoveChildRoute(Route route)
-        {
-            ChildRoutes?.Remove(route);
         }
     }
 }
