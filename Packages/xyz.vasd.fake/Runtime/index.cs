@@ -18,18 +18,29 @@ namespace Xyz.Vasd.Fake
     public interface INode
     {
         int GetId();
+
         void SetParent(INode node);
+
         void AddChild(INode child);
         void RemoveChild(INode child);
+
+        bool Contains(Type type);
     }
 
     public class Node : INode
     {
         public readonly int Id;
 
+        protected readonly List<Type> Types;
+
         public Node(int id)
         {
             Id = id;
+        }
+
+        int INode.GetId()
+        {
+            return Id;
         }
 
         void INode.SetParent(INode node)
@@ -44,9 +55,9 @@ namespace Xyz.Vasd.Fake
         {
         }
 
-        int INode.GetId()
+        bool INode.Contains(Type type)
         {
-            return Id;
+            return Types.Contains(type);
         }
     }
 
@@ -64,78 +75,51 @@ namespace Xyz.Vasd.Fake
         {
             return _prints.Contains(id);
         }
-    }
 
-    public class WeakRegistry<TKey, TValue>
-        where TKey : class
-        where TValue : class
-    {
-        private ConditionalWeakTable<TKey, TValue> _values = new();
-        private HashSet<int> _prints = new();
-
-        public TValue Get(TKey key)
+        public T Get(GameObject go)
         {
-            _values.TryGetValue(key, out var value);
-            return value;
+            _nodes.TryGetValue(go, out T node);
+            return node;
         }
 
-        public bool Contains(int print)
+        public void Set(GameObject go, T value)
         {
-            return _prints.Contains(print);
-        }
-
-        public virtual bool Contains(TKey key)
-        {
-            _values.TryGetValue(key, out var value);
-            return value != null;
-        }
-
-        public virtual void Set(TKey key, TValue value, int print)
-        {
-            _values.AddOrUpdate(key, value);
-            _prints.Add(print);
-        }
-
-        public void SetIfEmpty(TKey key, TValue value, int print)
-        {
-            if (!Contains(key)) Set(key, value, print);
+            _nodes.AddOrUpdate(go, value);
+            _prints.Add(value.GetId());
         }
     }
 
-    public class NodeRegistry2 : WeakRegistry<GameObject, Node>
+    public class NodeRegistry : NodeRegistry<Node>
     {
-        public void Scan(GameObject root, bool includeRoot = false)
-        {
-            for (int i = 0; i < root.transform.childCount; i++)
-            {
-                var child = root.transform.GetChild(i);
-                SetIfEmpty(child.gameObject, new Node());
-            }
-        }
-
-        public override bool Contains(GameObject key)
-        {
-            return Contains(key.GetInstanceID());
-        }
-
-        public void Set(GameObject key, Node value)
-        {
-            Set(key, value, key.GetInstanceID());
-        }
-        public void SetIfEmpty(GameObject key, Node value)
-        {
-            if (!Contains(key)) Set(key, value);
-        }
-        public static NodeRegistry GlobalRegistry
+        public static NodeRegistry Global
         {
             get
             {
-                if (_instance == null) _instance = new NodeRegistry();
-                return _instance;
+                if (_global == null) _global = new NodeRegistry();
+                return _global;
             }
-            private set => _instance = value;
         }
-        private static NodeRegistry _instance;
+        private static NodeRegistry _global;
+
+    }
+
+    public static class GameObjectExtensions
+    {
+        private static NodeRegistry Registry = NodeRegistry.Global;
+
+        public static INode GetFakeNode(this GameObject instance)
+        {
+            var id = instance.GetInstanceID();
+
+            if (!Registry.Contains(id)) Registry.Set(instance, new Node(id));
+
+            return Registry.Get(instance);
+        }
+
+        public static void SetFakeNode(this GameObject instance, Node node)
+        {
+            Registry.Set(instance, node);
+        }
     }
 }
 
@@ -147,7 +131,7 @@ namespace Xyz.Vasd.Fake
     
         private void Awake()
         {
-
+            var node = gameObject.GetFakeNode();
         }
     }
 }
