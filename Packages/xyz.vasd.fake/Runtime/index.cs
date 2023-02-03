@@ -13,4 +13,9 @@ namespace Xyz.Vasd.Fake
             Reference = reference;
         }
     }
+
+    public static class FakeAddressables
+    {
+
+    }
 }
