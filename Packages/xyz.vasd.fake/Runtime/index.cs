@@ -27,7 +27,10 @@ namespace Xyz.Vasd.Fake
         void RemoveChild(INode child);
 
         bool Contains(Type type);
+        bool Contains<T>() where T : class;
+
         object GetContent(Type type);
+        T GetContent<T>() where T : class;
     }
 
     public class Node : INode
@@ -94,11 +97,20 @@ namespace Xyz.Vasd.Fake
         {
             return _types.Contains(type);
         }
+        bool INode.Contains<T>() where T : class
+        {
+            return (this as INode).Contains(typeof(T));
+        }
 
         object INode.GetContent(Type type)
         {
             if (_content.ContainsKey(type)) return _content[type];
             return null;
+        }
+
+        T INode.GetContent<T>() where T : class
+        {
+            return (this as INode).GetContent(typeof(T)) as T;
         }
         #endregion
     }
