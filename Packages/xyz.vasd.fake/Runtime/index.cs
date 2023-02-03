@@ -19,8 +19,10 @@ namespace Xyz.Vasd.Fake
     {
         int GetId();
 
+        INode GetParent();
         void SetParent(INode node);
 
+        INode[] GetChildren();
         void AddChild(INode child);
         void RemoveChild(INode child);
 
@@ -33,6 +35,12 @@ namespace Xyz.Vasd.Fake
 
         protected readonly List<Type> Types;
 
+        private List<INode> _children;
+        private int _childrenVersion;
+
+        private INode[] _childrenArray;
+        private int _childrenArrayVersion;
+
         public Node(int id)
         {
             Id = id;
@@ -43,22 +51,48 @@ namespace Xyz.Vasd.Fake
             return Id;
         }
 
+        #region parent
+        INode INode.GetParent()
+        {
+            throw new NotImplementedException();
+        }
+
         void INode.SetParent(INode node)
         {
+        }
+        #endregion
+
+        #region Children
+        INode[] INode.GetChildren()
+        {
+            if (_childrenArrayVersion != _childrenVersion)
+            {
+                _childrenArray = _children.ToArray();
+                _childrenArrayVersion = _childrenVersion;
+            }
+
+            return _childrenArray;
         }
 
         void INode.AddChild(INode child)
         {
+            _children.Add(child);
+            _childrenVersion++;
         }
 
         void INode.RemoveChild(INode child)
         {
+            _children.Remove(child);
+            _childrenVersion++;
         }
+        #endregion
 
+        #region Content
         bool INode.Contains(Type type)
         {
             return Types.Contains(type);
         }
+        #endregion
     }
 
     public class NodeRegistry<T> where T : class, INode
