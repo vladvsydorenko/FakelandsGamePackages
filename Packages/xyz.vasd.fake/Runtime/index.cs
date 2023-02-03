@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Xyz.Vasd.Fake
@@ -33,6 +34,22 @@ namespace Xyz.Vasd.Fake
 
         void INode.RemoveChild(INode child)
         {
+        }
+    }
+
+    public class Tree
+    {
+        private Dictionary<GameObject, Node> _nodesMap;
+    }
+
+    public static class NodeTools
+    {
+        private static ConditionalWeakTable<GameObject, Node> _nodes;
+
+        public static Node GetNode(GameObject go)
+        {
+            _nodes.TryGetValue(go, out Node node);
+            return node;
         }
     }
 
