@@ -25,20 +25,12 @@ namespace Xyz.Vasd.Fake
         INode[] GetChildren();
         void AddChild(INode child);
         void RemoveChild(INode child);
-
-        bool Contains(Type type);
-        bool Contains<T>() where T : class;
-
-        object GetContent(Type type);
-        T GetContent<T>() where T : class;
     }
 
-    public class Node : INode
+    public class Node<T> : INode
     {
         public readonly int Id;
-
-        private List<Type> _types = new();
-        private Dictionary<Type, object> _content = new(); 
+        public readonly T Content;
 
         private List<INode> _children = new();
         private int _childrenVersion;
@@ -46,9 +38,10 @@ namespace Xyz.Vasd.Fake
         private INode[] _childrenArray = new INode[0];
         private int _childrenArrayVersion;
 
-        public Node(int id)
+        public Node(int id, T content = default)
         {
             Id = id;
+            Content = content;
         }
 
         int INode.GetId()
@@ -89,28 +82,6 @@ namespace Xyz.Vasd.Fake
         {
             _children.Remove(child);
             _childrenVersion++;
-        }
-        #endregion
-
-        #region Content
-        bool INode.Contains(Type type)
-        {
-            return _types.Contains(type);
-        }
-        bool INode.Contains<T>() where T : class
-        {
-            return (this as INode).Contains(typeof(T));
-        }
-
-        object INode.GetContent(Type type)
-        {
-            if (_content.ContainsKey(type)) return _content[type];
-            return null;
-        }
-
-        T INode.GetContent<T>() where T : class
-        {
-            return (this as INode).GetContent(typeof(T)) as T;
         }
         #endregion
     }
