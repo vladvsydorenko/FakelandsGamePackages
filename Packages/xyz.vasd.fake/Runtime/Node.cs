@@ -1,78 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Xyz.Vasd.Fake
 {
-    public interface INode
+
+
+    public class Route
     {
-        int GetId();
 
-        INode GetParent();
-        void SetParent(INode node);
-
-        INode[] GetChildren();
-        void AddChild(INode child);
-        void RemoveChild(INode child);
     }
 
-    public class Node : INode
+    public interface IRouteDB
     {
-        public readonly int Id;
+        Route[] GetRoutes(string location);
+    }
 
-        public Node Parent { get; private set; }
+    public class Router
+    {
+        public string Location { get; private set; }
 
-        private List<INode> _children = new();
-        private int _childrenVersion;
+        private Dictionary<string, Route[]> _routes = new();
 
-        private INode[] _childrenArray = new INode[0];
-        private int _childrenArrayVersion;
-
-        public Node(int id, Node parent = null)
+        public void Update()
         {
-            Id = id;
-            Parent = parent;
-        }
 
-        public int GetId()
-        {
-            return Id;
         }
-
-        #region parent
-        public INode GetParent()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetParent(INode node)
-        {
-            
-        }
-        #endregion
-
-        #region Children
-        public INode[] GetChildren()
-        {
-            if (_childrenArrayVersion != _childrenVersion)
-            {
-                _childrenArray = _children.ToArray();
-                _childrenArrayVersion = _childrenVersion;
-            }
-
-            return _childrenArray;
-        }
-
-        public void AddChild(INode child)
-        {
-            _children.Add(child);
-            _childrenVersion++;
-        }
-
-        public void RemoveChild(INode child)
-        {
-            _children.Remove(child);
-            _childrenVersion++;
-        }
-        #endregion
     }
 }
