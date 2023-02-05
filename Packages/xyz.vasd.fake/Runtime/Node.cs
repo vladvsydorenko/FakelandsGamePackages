@@ -14,106 +14,108 @@ namespace Xyz.Vasd.Fake
 
     public class Task : ITask
     {
-        public bool IsCompleted { get; private set; }
+        public ITask[] Dependencies;
+
+        public Task(params ITask[] dependencies)
+        {
+            Dependencies = dependencies;
+        }
 
         public bool Execute()
         {
-            if (IsCompleted) return true;
-
-            if (OnExecute()) IsCompleted = true;
-            return IsCompleted;
+            if (Dependencies != null && !Dependencies.All(task => task.Execute())) return false;
+            return OnExecute();
         }
 
         public virtual bool OnExecute()
         {
             return true;
         }
+
+        public Task Then(ITask task)
+        {
+            return new Task(this, task);
+        }
     }
 
     public class QuickTask : ITask
     {
-        public delegate bool TaskFunction();
-        public delegate void TaskFunctionVoid();
+        public delegate bool Task();
+        public delegate void TaskVoid();
 
-        public readonly TaskFunction Fn;
+        private Task _task;
 
-        public QuickTask(TaskFunction fn)
+        public QuickTask(Task task)
         {
-            Fn = fn;
+            _task = task;
         }
 
-        public QuickTask(TaskFunctionVoid fn)
+        public QuickTask(TaskVoid task)
         {
-            Fn = () =>
-            {
-                fn();
-                return true;
-            };
+            _task = VoidToTask(task);
         }
 
         public bool Execute()
         {
-            return Fn();
+            return _task();
         }
 
-        public QuickTask Then(TaskFunction fn)
+        public QuickTask Then(Task task)
         {
-            var nextTask = new QuickTask(fn);
+            return new QuickTask(() => Execute() && task());
+        }
+        public QuickTask Then(TaskVoid task)
+        {
+            return new QuickTask(() => Execute() && VoidToTask(task)());
+        }
 
-            return new QuickTask(() =>
+        public static QuickTask Create(Task task)
+        {
+            return new QuickTask(task);
+        }
+
+        public static QuickTask Create(TaskVoid task)
+        {
+            return new QuickTask(task);
+        }
+
+        private static Task VoidToTask(TaskVoid task)
+        {
+            return () =>
             {
-                return Execute() && nextTask.Execute();
-            });
-        }
-
-        public QuickTask Then(TaskFunctionVoid fn)
-        {
-            var nextTask = new QuickTask(fn);
-
-            return new QuickTask(() =>
-            {
-                return Execute() && nextTask.Execute();
-            });
-        }
-
-        public static QuickTask Create(TaskFunction fn)
-        {
-            return new QuickTask(fn);
-        }
-
-        public static QuickTask Create(TaskFunctionVoid fn)
-        {
-            return new QuickTask(fn);
+                task();
+                return true;
+            };
         }
     }
 
-    public class Page
+    public class Route : MonoBehaviour
     {
         public Animator Animator;
 
-        public ITask StartTask;
-        public ITask StopTask;
+        private QuickTask _startTask;
+        private QuickTask _stopTask;
 
-        public void Awake()
+        private void Awake()
         {
-            StartTask = QuickTask
+            _startTask = QuickTask
                 .Create(() => Animator.Play(0))
-                .Then(() => Animator.GetBool("start_completed"));
+                .Then(() => Animator.GetBool("started"));
 
-            StopTask = QuickTask
+            _stopTask = QuickTask
                 .Create(() => Animator.SetBool("stop", true))
-                .Then(() => Animator.GetBool("stop_completed"));
+                .Then(() => Debug.Log("bool was set"))
+                .Then(() => Animator.GetBool("stopped"));
         }
 
-        public bool Start()
+        public bool Open()
         {
-            return StartTask.Execute();
+            return _startTask.Execute();
         }
 
-        public bool Stop()
+        public bool Close()
         {
-            return StopTask.Execute();
+            return _stopTask.Execute();
         }
     }
-
 }
