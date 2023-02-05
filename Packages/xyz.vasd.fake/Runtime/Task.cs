@@ -1,4 +1,6 @@
-﻿namespace Xyz.Vasd.Fake
+﻿using UnityEngine;
+
+namespace Xyz.Vasd.Fake
 {
     public interface ITask
     {
@@ -8,92 +10,82 @@
     public class Task : ITask
     {
         public int Version { get; protected set; } = -1;
-        public int ExecuteVersion { get; protected set; } = -1;
-        public int CompletedVersion { get; protected set; } = -1;
+        public bool IsCompleted;
 
         public bool Execute(int version)
         {
-            if (CompletedVersion == version) return true;
+            if (IsCompleted && Version == version) return true;
 
-            // new version and was executing in previous version
-            if (Version > -1 && Version != version && ExecuteVersion == Version)
-            {
-                OnReset();
-            }
+            if (Version < 0) return Start(version);
+            if (Version != version) return Restart(version);
 
+            IsCompleted = OnExecute();
+
+            return IsCompleted;
+        }
+
+        private bool Start(int version)
+        {
             Version = version;
-
-            if (OnExecute())
-            {
-                // completed
-                CompletedVersion = Version;
-            }
-            else
-            {
-                // not completed yet, executing...
-                ExecuteVersion = Version;
-            }
-
-
-            return true;
+            OnStart();
+            return OnExecute();
         }
 
-        public virtual void OnReset()
+        private bool Restart(int version)
+        {
+            OnReset();
+            return Start(version);
+        }
+
+        protected virtual void OnStart()
         {
 
         }
 
-        public virtual bool OnExecute()
+        protected virtual bool OnExecute()
         {
             return true;
+        }
+
+        protected virtual void OnReset()
+        {
+
         }
     }
 
-    public class QuickTask : Task
+    public class TaskFunction
     {
         public delegate bool Action();
         public delegate bool ActionWithVersion(int version);
         public delegate void VoidAction();
         public delegate void VoidActionWithVersion(int version);
 
-        private Action _action;
-        private ActionWithVersion _actionWithVersion;
-        private VoidAction _voidAction;
-        private VoidActionWithVersion _voidActionWithVersion;
+        private Action _action = null;
+        private ActionWithVersion _actionWithVersion = null;
+        private VoidAction _voidAction = null;
+        private VoidActionWithVersion _voidActionWithVersion = null;
 
-        public QuickTask(Action action)
+        public TaskFunction(Action action)
         {
             _action = action;
-            _actionWithVersion = null;
-            _voidAction = null;
-            _voidActionWithVersion = null;
         }
 
-        public QuickTask(ActionWithVersion action)
+        public TaskFunction(ActionWithVersion action)
         {
-            _action = null;
             _actionWithVersion = action;
-            _voidAction = null;
-            _voidActionWithVersion = null;
         }
 
-        public QuickTask(VoidAction action)
+        public TaskFunction(VoidAction action)
         {
-            _action = null;
-            _actionWithVersion = null;
             _voidAction = action;
-            _voidActionWithVersion = null;
         }
 
-        public QuickTask(VoidActionWithVersion action)
+        public TaskFunction(VoidActionWithVersion action)
         {
-            _action = null;
-            _actionWithVersion = null;
-            _voidAction = null;
             _voidActionWithVersion = action;
         }
 
-        public override bool OnExecute()
+        public bool Execute(int version)
         {
             if (_voidAction != null)
             {
@@ -103,12 +95,101 @@
 
             if (_voidActionWithVersion != null)
             {
-                _voidActionWithVersion(Version);
+                _voidActionWithVersion(version);
                 return true;
             }
 
             if (_action != null) return _action();
-            return _actionWithVersion(Version);
+            return _actionWithVersion(version);
+        }
+
+        public static implicit operator TaskFunction(Action action)
+        {
+            return new TaskFunction(action);
+        }
+
+        public static implicit operator TaskFunction(ActionWithVersion action)
+        {
+            return new TaskFunction(action);
+        }
+
+        public static implicit operator TaskFunction(VoidAction action)
+        {
+            return new TaskFunction(action);
+        }
+
+        public static implicit operator TaskFunction(VoidActionWithVersion action)
+        {
+            return new TaskFunction(action);
+        }
+    }
+
+    public class QuickTask : Task
+    {
+        private TaskFunction _action;
+
+        public QuickTask(TaskFunction.Action action)
+        {
+            _action = action;
+        }
+
+        public QuickTask(TaskFunction.ActionWithVersion action)
+        {
+            _action = action;
+        }
+
+        public QuickTask(TaskFunction.VoidAction action)
+        {
+            _action = action;
+        }
+
+        public QuickTask(TaskFunction.VoidActionWithVersion action)
+        {
+            _action = action;
+        }
+
+        protected override bool OnExecute()
+        {
+            return _action.Execute(Version);
+        }
+
+        public QuickTask Then(ITask task)
+        {
+            return new QuickTask((int version) => Execute(version) && task.Execute(version));
+        }
+
+        public QuickTask Then(TaskFunction.Action action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(TaskFunction.ActionWithVersion action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(TaskFunction.VoidAction action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(TaskFunction.VoidActionWithVersion action)
+        {
+            return Then(new QuickTask(action));
+        }
+
+        public static QuickTask Create(TaskFunction.Action action)
+        {
+            return new QuickTask(action);
+        }
+        public static QuickTask Create(TaskFunction.ActionWithVersion action)
+        {
+            return new QuickTask(action);
+        }
+        public static QuickTask Create(TaskFunction.VoidAction action)
+        {
+            return new QuickTask(action);
+        }
+        public static QuickTask Create(TaskFunction.VoidActionWithVersion action)
+        {
+            return new QuickTask(action);
         }
     }
 }
@@ -118,23 +199,43 @@ namespace Xyz.Vasd.Fake
     public class Page
     {
         private ITask _openTask;
+        private ITask _closeTask;
 
         private int CloseVersion;
 
+        private Animator Animator;
+
         public void Setup()
         {
-            _openTask = new QuickTask(() => { });
+            _openTask = QuickTask
+                .Create(() => 
+                {
+                    Animator.Play(0);
+                })
+                .Then(() => 
+                {
+                    return Animator.GetBool("open");
+                });
+
+            _closeTask = QuickTask
+                .Create(() => 
+                {
+                    Animator.SetBool("close", true);
+                })
+                .Then(() => 
+                {
+                    return Animator.GetBool("closed");
+                });
         }
 
         public bool Open()
         {
-            return _openTask.Execute(CloseVersion);
+            return _openTask.Execute(version: 0);
         }
 
-        public bool Close(int version)
+        public bool Close()
         {
-            CloseVersion = version;
-            return true;
+            return _closeTask.Execute(version: 0);
         }
     }
 }
