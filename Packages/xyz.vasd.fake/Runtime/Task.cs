@@ -53,7 +53,7 @@ namespace Xyz.Vasd.Fake
         }
     }
 
-    public class TaskFunction
+    public class QuickTaskFunction
     {
         public delegate bool Action();
         public delegate bool ActionWithVersion(int version);
@@ -65,22 +65,22 @@ namespace Xyz.Vasd.Fake
         private VoidAction _voidAction = null;
         private VoidActionWithVersion _voidActionWithVersion = null;
 
-        public TaskFunction(Action action)
+        public QuickTaskFunction(Action action)
         {
             _action = action;
         }
 
-        public TaskFunction(ActionWithVersion action)
+        public QuickTaskFunction(ActionWithVersion action)
         {
             _actionWithVersion = action;
         }
 
-        public TaskFunction(VoidAction action)
+        public QuickTaskFunction(VoidAction action)
         {
             _voidAction = action;
         }
 
-        public TaskFunction(VoidActionWithVersion action)
+        public QuickTaskFunction(VoidActionWithVersion action)
         {
             _voidActionWithVersion = action;
         }
@@ -103,47 +103,47 @@ namespace Xyz.Vasd.Fake
             return _actionWithVersion(version);
         }
 
-        public static implicit operator TaskFunction(Action action)
+        public static implicit operator QuickTaskFunction(Action action)
         {
-            return new TaskFunction(action);
+            return new QuickTaskFunction(action);
         }
 
-        public static implicit operator TaskFunction(ActionWithVersion action)
+        public static implicit operator QuickTaskFunction(ActionWithVersion action)
         {
-            return new TaskFunction(action);
+            return new QuickTaskFunction(action);
         }
 
-        public static implicit operator TaskFunction(VoidAction action)
+        public static implicit operator QuickTaskFunction(VoidAction action)
         {
-            return new TaskFunction(action);
+            return new QuickTaskFunction(action);
         }
 
-        public static implicit operator TaskFunction(VoidActionWithVersion action)
+        public static implicit operator QuickTaskFunction(VoidActionWithVersion action)
         {
-            return new TaskFunction(action);
+            return new QuickTaskFunction(action);
         }
     }
 
     public class QuickTask : Task
     {
-        private TaskFunction _action;
+        private QuickTaskFunction _action;
 
-        public QuickTask(TaskFunction.Action action)
+        public QuickTask(QuickTaskFunction.Action action)
         {
             _action = action;
         }
 
-        public QuickTask(TaskFunction.ActionWithVersion action)
+        public QuickTask(QuickTaskFunction.ActionWithVersion action)
         {
             _action = action;
         }
 
-        public QuickTask(TaskFunction.VoidAction action)
+        public QuickTask(QuickTaskFunction.VoidAction action)
         {
             _action = action;
         }
 
-        public QuickTask(TaskFunction.VoidActionWithVersion action)
+        public QuickTask(QuickTaskFunction.VoidActionWithVersion action)
         {
             _action = action;
         }
@@ -158,36 +158,36 @@ namespace Xyz.Vasd.Fake
             return new QuickTask((int version) => Execute(version) && task.Execute(version));
         }
 
-        public QuickTask Then(TaskFunction.Action action)
+        public QuickTask Then(QuickTaskFunction.Action action)
         {
             return Then(new QuickTask(action));
         }
-        public QuickTask Then(TaskFunction.ActionWithVersion action)
+        public QuickTask Then(QuickTaskFunction.ActionWithVersion action)
         {
             return Then(new QuickTask(action));
         }
-        public QuickTask Then(TaskFunction.VoidAction action)
+        public QuickTask Then(QuickTaskFunction.VoidAction action)
         {
             return Then(new QuickTask(action));
         }
-        public QuickTask Then(TaskFunction.VoidActionWithVersion action)
+        public QuickTask Then(QuickTaskFunction.VoidActionWithVersion action)
         {
             return Then(new QuickTask(action));
         }
 
-        public static QuickTask Create(TaskFunction.Action action)
+        public static QuickTask Create(QuickTaskFunction.Action action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(TaskFunction.ActionWithVersion action)
+        public static QuickTask Create(QuickTaskFunction.ActionWithVersion action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(TaskFunction.VoidAction action)
+        public static QuickTask Create(QuickTaskFunction.VoidAction action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(TaskFunction.VoidActionWithVersion action)
+        public static QuickTask Create(QuickTaskFunction.VoidActionWithVersion action)
         {
             return new QuickTask(action);
         }
@@ -200,8 +200,6 @@ namespace Xyz.Vasd.Fake
     {
         private ITask _openTask;
         private ITask _closeTask;
-
-        private int CloseVersion;
 
         private Animator Animator;
 
