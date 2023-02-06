@@ -1,140 +1,65 @@
 ﻿namespace Xyz.Vasd.Fake.Task
 {
-    public class QuickTaskFunction
+    public partial class QuickTask : FakeTask
     {
-        public delegate bool Action();
-        public delegate bool ActionWithVersion(int version);
-        public delegate void VoidAction();
-        public delegate void VoidActionWithVersion(int version);
+        private QuickFunction _function;
 
-        private Action _action = null;
-        private ActionWithVersion _actionWithVersion = null;
-        private VoidAction _voidAction = null;
-        private VoidActionWithVersion _voidActionWithVersion = null;
-
-        public QuickTaskFunction(Action action)
+        public QuickTask(Action action)
         {
-            _action = action;
+            _function = action;
         }
-
-        public QuickTaskFunction(ActionWithVersion action)
+        public QuickTask(ActionVersion action)
         {
-            _actionWithVersion = action;
+            _function = action;
         }
-
-        public QuickTaskFunction(VoidAction action)
+        public QuickTask(Void action)
         {
-            _voidAction = action;
+            _function = action;
         }
-
-        public QuickTaskFunction(VoidActionWithVersion action)
+        public QuickTask(VoidVersion action)
         {
-            _voidActionWithVersion = action;
-        }
-
-        public bool Execute(int version)
-        {
-            if (_voidAction != null)
-            {
-                _voidAction();
-                return true;
-            }
-
-            if (_voidActionWithVersion != null)
-            {
-                _voidActionWithVersion(version);
-                return true;
-            }
-
-            if (_action != null) return _action();
-            return _actionWithVersion(version);
-        }
-
-        public static implicit operator QuickTaskFunction(Action action)
-        {
-            return new QuickTaskFunction(action);
-        }
-
-        public static implicit operator QuickTaskFunction(ActionWithVersion action)
-        {
-            return new QuickTaskFunction(action);
-        }
-
-        public static implicit operator QuickTaskFunction(VoidAction action)
-        {
-            return new QuickTaskFunction(action);
-        }
-
-        public static implicit operator QuickTaskFunction(VoidActionWithVersion action)
-        {
-            return new QuickTaskFunction(action);
-        }
-    }
-
-    public class QuickTask : FakeTask
-    {
-        private QuickTaskFunction _action;
-
-        public QuickTask(QuickTaskFunction.Action action)
-        {
-            _action = action;
-        }
-
-        public QuickTask(QuickTaskFunction.ActionWithVersion action)
-        {
-            _action = action;
-        }
-
-        public QuickTask(QuickTaskFunction.VoidAction action)
-        {
-            _action = action;
-        }
-
-        public QuickTask(QuickTaskFunction.VoidActionWithVersion action)
-        {
-            _action = action;
+            _function = action;
         }
 
         protected override bool OnExecute()
         {
-            return _action.Execute(Version);
+            return _function.Execute(Version);
         }
 
         public QuickTask Then(IFakeTask task)
         {
             return new QuickTask((version) => Execute(version) && task.Execute(version));
         }
+        public QuickTask Then(Action action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(ActionVersion action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(Void action)
+        {
+            return Then(new QuickTask(action));
+        }
+        public QuickTask Then(VoidVersion action)
+        {
+            return Then(new QuickTask(action));
+        }
 
-        public QuickTask Then(QuickTaskFunction.Action action)
-        {
-            return Then(new QuickTask(action));
-        }
-        public QuickTask Then(QuickTaskFunction.ActionWithVersion action)
-        {
-            return Then(new QuickTask(action));
-        }
-        public QuickTask Then(QuickTaskFunction.VoidAction action)
-        {
-            return Then(new QuickTask(action));
-        }
-        public QuickTask Then(QuickTaskFunction.VoidActionWithVersion action)
-        {
-            return Then(new QuickTask(action));
-        }
-
-        public static QuickTask Create(QuickTaskFunction.Action action)
+        public static QuickTask Create(Action action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(QuickTaskFunction.ActionWithVersion action)
+        public static QuickTask Create(ActionVersion action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(QuickTaskFunction.VoidAction action)
+        public static QuickTask Create(Void action)
         {
             return new QuickTask(action);
         }
-        public static QuickTask Create(QuickTaskFunction.VoidActionWithVersion action)
+        public static QuickTask Create(VoidVersion action)
         {
             return new QuickTask(action);
         }
