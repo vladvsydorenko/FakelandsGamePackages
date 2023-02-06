@@ -10,31 +10,33 @@ namespace Xyz.Vasd.Fake
     public class Task : ITask
     {
         public int Version { get; protected set; } = -1;
-        public bool IsCompleted;
+        public bool IsStarted { get; protected set; }
+        public bool IsCompleted { get; protected set; }
 
         public bool Execute(int version)
         {
             if (IsCompleted && Version == version) return true;
 
-            if (Version < 0) return Start(version);
-            if (Version != version) return Restart(version);
+            if (Version < 0) Start(version);
+            else if (Version != version) Restart(version);
 
             IsCompleted = OnExecute();
 
             return IsCompleted;
         }
 
-        private bool Start(int version)
+        private void Start(int version)
         {
             Version = version;
             OnStart();
-            return OnExecute();
+            IsStarted = true;
         }
 
-        private bool Restart(int version)
+        private void Restart(int version)
         {
             OnReset();
-            return Start(version);
+            IsStarted = false;
+            Start(version);
         }
 
         protected virtual void OnStart()
