@@ -1,32 +1,32 @@
 ﻿using UnityEngine;
 
-namespace Xyz.Vasd.Fake
+namespace Xyz.Vasd.Fake.Task
 {
     public class Page
     {
-        private ITask _openTask;
-        private ITask _closeTask;
+        private IFakeTask _openTask;
+        private IFakeTask _closeTask;
 
         private Animator Animator;
 
         public void Setup()
         {
             _openTask = QuickTask
-                .Create(() => 
+                .Create(() =>
                 {
                     Animator.Play(0);
                 })
-                .Then(() => 
+                .Then(() =>
                 {
                     return Animator.GetBool("open");
                 });
 
             _closeTask = QuickTask
-                .Create(() => 
+                .Create(() =>
                 {
                     Animator.SetBool("close", true);
                 })
-                .Then(() => 
+                .Then(() =>
                 {
                     return Animator.GetBool("closed");
                 });

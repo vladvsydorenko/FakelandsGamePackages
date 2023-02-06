@@ -1,13 +1,13 @@
-﻿namespace Xyz.Vasd.Fake
+﻿namespace Xyz.Vasd.Fake.Task
 {
-    public interface ITask
+    public interface IFakeTask
     {
         int Version { get; }
         bool IsCompleted { get; }
         bool Execute(int version);
     }
 
-    public class Task : ITask
+    public class FakeTask : IFakeTask
     {
         public int Version { get; protected set; } = -1;
         public bool IsCompleted { get; protected set; } = false;
@@ -18,7 +18,7 @@
 
             if (version != Version)
             {
-                if (Version >= 0) OnStop();
+                if (Version >= 0 && !IsCompleted) OnStop();
 
                 Version = version;
                 IsCompleted = false;
@@ -26,6 +26,9 @@
             }
 
             IsCompleted = OnExecute();
+
+            if (IsCompleted) OnStop();
+
             return IsCompleted;
         }
 
@@ -44,8 +47,4 @@
 
         }
     }
-}
-
-namespace Xyz.Vasd.Fake
-{
 }

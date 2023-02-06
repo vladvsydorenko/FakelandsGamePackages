@@ -1,4 +1,4 @@
-﻿namespace Xyz.Vasd.Fake
+﻿namespace Xyz.Vasd.Fake.Task
 {
     public class QuickTaskFunction
     {
@@ -71,7 +71,7 @@
         }
     }
 
-    public class QuickTask : Task
+    public class QuickTask : FakeTask
     {
         private QuickTaskFunction _action;
 
@@ -100,9 +100,9 @@
             return _action.Execute(Version);
         }
 
-        public QuickTask Then(ITask task)
+        public QuickTask Then(IFakeTask task)
         {
-            return new QuickTask((int version) => Execute(version) && task.Execute(version));
+            return new QuickTask((version) => Execute(version) && task.Execute(version));
         }
 
         public QuickTask Then(QuickTaskFunction.Action action)
