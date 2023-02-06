@@ -1,13 +1,7 @@
 ﻿namespace Xyz.Vasd.Fake.Task
 {
-    public interface IFakeTask
-    {
-        int Version { get; }
-        bool IsCompleted { get; }
-        bool Execute(int version);
-    }
 
-    public class FakeTask : IFakeTask
+    public partial class FakeTask : IFakeTask
     {
         public int Version { get; protected set; } = -1;
         public bool IsCompleted { get; protected set; } = false;

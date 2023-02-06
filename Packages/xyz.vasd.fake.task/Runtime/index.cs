@@ -11,25 +11,35 @@ namespace Xyz.Vasd.Fake.Task
 
         public void Setup()
         {
-            _openTask = QuickTask
-                .Create(() =>
+            _openTask = FakeTask
+                .Function((v) =>
                 {
                     Animator.Play(0);
                 })
-                .Then(() =>
+                .Then((v) =>
                 {
                     return Animator.GetBool("open");
                 });
 
-            _closeTask = QuickTask
-                .Create(() =>
-                {
-                    Animator.SetBool("close", true);
-                })
-                .Then(() =>
-                {
-                    return Animator.GetBool("closed");
-                });
+            //_openTask = FakeTaskLambda2
+            //    .Create(() =>
+            //    {
+            //        Animator.Play(0);
+            //    })
+            //    .Then(() =>
+            //    {
+            //        return Animator.GetBool("open");
+            //    });
+
+            //_closeTask = FakeTaskLambda2
+            //    .Create(() =>
+            //    {
+            //        Animator.SetBool("close", true);
+            //    })
+            //    .Then(() =>
+            //    {
+            //        return Animator.GetBool("closed");
+            //    });
         }
 
         public bool Open()

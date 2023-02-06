@@ -72,19 +72,21 @@ namespace Xyz.Vasd.Fake
         {
             var value = 0f;
 
-            var task = QuickTask
-                .Create(() =>
+            var task2 = new FakeTask() as IFakeTask;
+            task2.Then(v => { });
+
+            var task = FakeTask.Function((v) =>
                 {
                     Debug.Log("Create me");
                     value = 0f;
                 })
-                .Then(() =>
+                .Then((v) =>
                 {
                     value++;
                     Debug.Log($"Update me {value}");
                     return value > 2f;
                 })
-                .Then(() =>
+                .Then((v) =>
                 {
                     Debug.Log("Stop me");
                 });
