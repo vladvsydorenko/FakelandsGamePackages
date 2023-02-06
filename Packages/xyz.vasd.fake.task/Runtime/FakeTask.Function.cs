@@ -7,8 +7,8 @@
             public delegate void Void(int version);
             public delegate bool Action(int version);
 
-            private Void _void = null;
-            private Action _action = null;
+            private readonly Void _void = null;
+            private readonly Action _action = null;
 
             public TaskFunction(Void action)
             {
