@@ -1,6 +1,5 @@
 ﻿namespace Xyz.Vasd.Fake.Task
 {
-
     public partial class FakeTask : IFakeTask
     {
         public int Version { get; protected set; } = -1;
