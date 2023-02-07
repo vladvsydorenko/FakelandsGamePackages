@@ -1,8 +1,0 @@
-{
-  "name": "xyz.vasd.fake.task",
-  "displayName": "Fake.Task",
-  "unity": "2021.3",
-  "description": "Task system for Fake framework",
-  "version": "0.0.1-alpha.1",
-  "hideInEditor": false
-}

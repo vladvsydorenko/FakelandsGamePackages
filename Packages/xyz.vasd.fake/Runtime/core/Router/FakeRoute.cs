@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using Xyz.Vasd.Fake.Task;
 
 namespace Xyz.Vasd.Fake.Router
 {
     public interface IFakeRoute
     {
         bool MatchRoute(string path);
-        bool OpenRoute();
-        bool CloseRoute();
+        bool OpenRoute(int version);
+        bool CloseRoute(int version);
     }
 
     public class FakeRoute : MonoBehaviour, IFakeRoute
@@ -24,23 +23,23 @@ namespace Xyz.Vasd.Fake.Router
             return path == Path;
         }
 
-        public bool OpenRoute()
+        public bool OpenRoute(int version = 0)
         {
-            return OnOpenRoute();
+            return OnOpenRoute(version);
         }
 
-        public bool CloseRoute()
+        public bool CloseRoute(int version = 0)
         {
-            return OnCloseRoute();
+            return OnCloseRoute(version);
         }
 
-        public virtual bool OnOpenRoute()
+        public virtual bool OnOpenRoute(int version)
         {
             gameObject.SetActive(true);
             return true;
         }
 
-        public virtual bool OnCloseRoute()
+        public virtual bool OnCloseRoute(int version)
         {
             gameObject.SetActive(false);
             return true;

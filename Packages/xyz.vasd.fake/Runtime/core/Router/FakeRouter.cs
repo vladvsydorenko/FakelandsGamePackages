@@ -8,6 +8,7 @@ namespace Xyz.Vasd.Fake.Router
     {
         public string Path { get; private set; }
         public string PreviousPath { get; private set; }
+        public int PathVersion = 0;
 
         public List<IFakeRoute> Routes { get; private set; }
 
@@ -41,6 +42,8 @@ namespace Xyz.Vasd.Fake.Router
 
             _closeRoutes = _openRoutes;
             _openRoutes = routes;
+
+            PathVersion++;
         }
 
         public void Update()
@@ -49,10 +52,10 @@ namespace Xyz.Vasd.Fake.Router
                 
             if (!_isBusy) return;
 
-            if (!_isOpen) _isOpen = _openRoutes.All(route => route.OpenRoute());
+            if (!_isOpen) _isOpen = _openRoutes.All(route => route.OpenRoute(PathVersion));
             if (!_isOpen) return;
 
-            _isBusy = _closeRoutes != null && !_closeRoutes.All(route => route.CloseRoute());
+            _isBusy = _closeRoutes != null && !_closeRoutes.All(route => route.CloseRoute(PathVersion));
         }
     }
 }

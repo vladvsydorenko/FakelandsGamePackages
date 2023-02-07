@@ -1,0 +1,14 @@
+{
+    "name": "XV.Fake.Router",
+    "rootNamespace": "Xyz.Vasd.Fake.Router",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
